@@ -1,0 +1,62 @@
+
+
+services:
+  n8nio:
+    image: docker.n8n.io/n8nio/n8n:2.21.7
+    container_name: n8n
+    restart: unless-stopped
+    volumes:
+      - ./data/n8n_data:/home/node/.n8n
+      - ./data/files:/home/node/.n8n-files
+      # correct time
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro 
+    ports:
+      - 5673:5673
+    networks:
+      - traefik-net
+    environment:
+      - PUID=${UID}
+      - PGID=${GID}
+      - GENERIC_TIMEZONE=${TZ}
+      - N8N_SECURE_COOKIE=false
+      - N8N_HOST=192.168.0.120
+      # - N8N_HOST=n8n.home.arpa
+      - N8N_PORT=5673
+      - WEBHOOK_URL=http://n8n.home.arpa
+      - N8N_PROTOCOL=http
+      - NODE_ENV=production
+      # - N8N_PATH=/n8n
+      # external runner 
+      - N8N_PYTHON_ENABLED=false
+      - N8N_RUNNERS_ENABLED=false
+      # upgrade
+      - N8N_MIGRATE_FS_STORAGE_PATH=true
+      - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=false
+      - N8N_VERSION_NOTIFICATIONS_ENABLED=false
+      - N8N_HIRING_BANNER_ENABLED=false
+      - N8N_PUBLIC_API_SWAGGERUI_DISABLED=false
+      - N8N_PUBLIC_API_DISABLED=false
+      - N8N_TEMPLATES_ENABLED=false
+      - N8N_LOG_FILE_COUNT_MAX=50
+      - N8N_LOG_FILE_SIZE_MAX=10
+      # - N8N_EDITOR_BASE_URL=
+      - N8N_WORKFLOW_HISTORY_PRUNE_TIME=2160 # 3 months
+    tty: true
+    stdin_open: true
+    labels:
+      - "traefik.enable=true"
+      # https
+      - "traefik.http.routers.n8n.rule=Host(`n8n.home.arpa`)"
+      - "traefik.http.routers.n8n.entrypoints=websecure"
+      - 'traefik.http.routers.n8n.tls=true'
+      - "traefik.http.services.n8n.loadbalancer.server.port=5673"
+      # http
+      - "traefik.http.routers.n8n-insecure.rule=Host(`n8n.home.arpa`)"
+      - "traefik.http.routers.n8n-insecure.entrypoints=web"
+
+
+networks:
+  traefik-net:
+    external: true
+    name: traefik-net

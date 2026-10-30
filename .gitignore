@@ -1,0 +1,15 @@
+
+# Ignore all docker data dir
+*/data
+
+# ignore system files
+.idea
+
+# Ignore .env only in the parent directory
+.env
+
+# Ignore env in subdir
+*/.env
+
+
+
