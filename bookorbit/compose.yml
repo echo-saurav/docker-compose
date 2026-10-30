@@ -66,16 +66,6 @@ services:
       - "traefik.http.routers.bookorbit.tls.certresolver=myresolver"
       - "traefik.http.services.bookorbit.loadbalancer.server.port=3000"
 
-    # labels:
-    #   - "traefik.enable=true"
-    #   # https
-    #   - "traefik.http.routers.bookorbit.rule=host(`bookorbit.home.arpa`)"
-    #   - "traefik.http.routers.bookorbit.entrypoints=websecure"
-    #   - 'traefik.http.routers.bookorbit.tls=true'
-    #   - "traefik.http.services.bookorbit.loadbalancer.server.port=3000"
-    #   # http
-    #   - "traefik.http.routers.bookorbit-insecure.rule=host(`bookorbit.home.arpa`)"
-    #   - "traefik.http.routers.bookorbit-insecure.entrypoints=web"
 
   # https://github.com/remsky/Kokoro-FastAPI/blob/master/docs/configuration.md
   kokoro:
