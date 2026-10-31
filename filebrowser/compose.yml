@@ -31,33 +31,6 @@ services:
       start_period: 10s
       retries: 3
 
-  # filebrowser:
-  #   image: filebrowser/filebrowser:v2.63.15
-  #   container_name: filebrowser
-  #   restart: unless-stopped
-  #   ports:
-  #     - 4040:80
-  #   environment:
-  #     - TZ=${TZ}
-  #     - PUID=${UID}
-  #     - PGID=${GID}
-  #   volumes:
-  #     - ./data/database:/database
-  #     - ./data/config:/config
-  #     - ~/Public:/srv
-  #   networks:
-  #     - traefik-net
-  #   labels:
-  #     - "traefik.enable=true"
-  #     # https
-  #     - "traefik.http.routers.file.rule=host(`file.home.arpa`)"
-  #     - "traefik.http.routers.file.entrypoints=websecure"
-  #     - 'traefik.http.routers.file.tls=true'
-  #     - "traefik.http.services.file.loadbalancer.server.port=80"
-  #     # http
-  #     - "traefik.http.routers.file-insecure.rule=host(`file.home.arpa`)"
-  #     - "traefik.http.routers.file-insecure.entrypoints=web"
-
 
 
 networks:
