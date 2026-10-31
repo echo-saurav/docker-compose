@@ -1,0 +1,91 @@
+
+services:
+  immich-server:
+    container_name: immich_server
+    image: ghcr.io/immich-app/immich-server:${IMMICH_VERSION:-release}
+    ports:
+      - 2284:2283
+    networks:
+      - traefik-net
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${UPLOAD_LOCATION}:/usr/src/app/upload
+      - ./data/config.json:${IMMICH_CONFIG_FILE}
+      - ~/Private/Pictures/OldPhotos:/mnt/media/old-photos
+    env_file:
+      - .env
+    depends_on:
+      - redis
+      - database
+    restart: unless-stopped
+    devices:
+      - /dev/dri:/dev/dri
+    labels:
+      - "traefik.enable=true"
+      # adguard domain
+      # secure
+      - "traefik.http.routers.immich-local.rule=Host(`photos.home.arpa`)"
+      - "traefik.http.routers.immich-local.entrypoints=websecure"
+      - "traefik.http.routers.immich-local.tls=true"
+      # duck dns
+      # insecure
+      - "traefik.http.routers.immich-local-insecure.rule=Host(`photos.home.arpa`)"
+      - "traefik.http.routers.immich-local-insecure.entrypoints=web"
+      # https
+      - "traefik.http.routers.immich.rule=Host(`${DUCK_IMMICH}`)"
+      - "traefik.http.routers.immich.entrypoints=websecure"
+      - "traefik.http.routers.immich.tls=true"
+      - "traefik.http.routers.immich.tls.certresolver=myresolver"
+      - "traefik.http.services.immich.loadbalancer.server.port=2283"
+      # http
+      - "traefik.http.routers.immich-insecure.rule=Host(`${DUCK_IMMICH}`)"
+      - "traefik.http.routers.immich-insecure.entrypoints=web"
+
+  immich-machine-learning:
+    image: ghcr.io/immich-app/immich-machine-learning:${IMMICH_VERSION:-release}
+    container_name: immich_machine_learning
+    networks:
+      - traefik-net
+    volumes:
+      - ${docker_data_dir}/immich-machine-learning:/cache
+    env_file:
+      - .env
+    restart: unless-stopped
+    healthcheck:
+      disable: false
+
+  redis:
+    image: docker.io/valkey/valkey:9@sha256:4963247afc4cd33c7d3b2d2816b9f7f8eeebab148d29056c2ca4d7cbc966f2d9
+    container_name: immich_redis
+    networks:
+      - traefik-net
+    healthcheck:
+      test: redis-cli ping || exit 1
+    restart: unless-stopped
+
+
+  database:
+    container_name: immich_postgres
+    image: ghcr.io/immich-app/postgres:14-vectorchord0.3.0-pgvectors0.2.0
+    shm_size: 128mb
+    env_file:
+      - .env
+    networks:
+      - traefik-net
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_DB: ${DB_DATABASE_NAME}
+      POSTGRES_INITDB_ARGS: '--data-checksums'
+    volumes:
+      - ${docker_data_dir}/database:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      disable: false
+
+networks:
+  traefik-net:
+    external: true
+    name: traefik-net
+
+
