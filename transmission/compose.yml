@@ -1,0 +1,48 @@
+
+services:
+  transmission:
+    image: lscr.io/linuxserver/transmission:4.1.4
+    container_name: transmission
+    restart: unless-stopped
+    # performance lowering 
+    blkio_config:
+      weight: 100 # 100 - 500 Lowest priority priority allocation
+    cpus: "1.0" # download does not need much cpu
+    cpu_shares: 512  # High CPU processing priority when host is busy
+    networks:
+      - traefik-net
+    environment:
+      - PUID=${UID}
+      - PGID=${GID}
+      - TZ=${TZ}
+      - TRANSMISSION_WEB_HOME=/transmissionic/
+      - USER=${USER}
+      - PASS=${PASS}
+      - WHITELIST= 
+      - PEERPORT=${PEERPORT}
+      - HOST_WHITELIST= 
+    volumes:
+      - ~/Public/Media:/data
+      - ./data/transmissionic-webui-v1.8.0/:/transmissionic/
+      - ./data/transmission/:/config
+    ports:
+      - 9093:9091
+      - 30001:30001
+      - 30001:30001/udp
+    labels:
+      - "traefik.enable=true"
+      # https
+      - "traefik.http.routers.transmission.rule=host(`transmission.home.arpa`)"
+      - "traefik.http.routers.transmission.entrypoints=websecure"
+      - 'traefik.http.routers.transmission.tls=true'
+      - "traefik.http.services.transmission.loadbalancer.server.port=9091"
+      # http
+      - "traefik.http.routers.transmission-insecure.rule=host(`transmission.home.arpa`)"
+      - "traefik.http.routers.transmission-insecure.entrypoints=web"
+
+
+networks:
+  traefik-net:
+    external: true
+    name: traefik-net
+
