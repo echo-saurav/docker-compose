@@ -1,0 +1,53 @@
+
+services:
+  # https://appriseit.com/getting-started/
+  apprise:
+    image: caronc/apprise:2
+    restart: unless-stopped
+    container_name: apprise
+    depends_on:
+      - bark-server
+    ports:
+      - 8888:8000
+    environment:
+      APPRISE_STATEFUL_MODE: simple
+      APPRISE_WORKER_COUNT: "1"
+      APPRISE_ADMIN: "y"
+    volumes:
+      - ./data/apprise/config:/config
+      - ./data/apprise/plugin:/plugin
+      - ./data/apprise/attach:/attach
+    networks:
+      - traefik-net
+    labels:
+      - "traefik.enable=true"
+      # https
+      - "traefik.http.routers.apprise.rule=host(`apprise.home.arpa`)"
+      - "traefik.http.routers.apprise.entrypoints=websecure"
+      - 'traefik.http.routers.apprise.tls=true'
+      - "traefik.http.services.apprise.loadbalancer.server.port=8000"
+      # http
+      - "traefik.http.routers.apprise-insecure.rule=host(`apprise.home.arpa`)"
+      - "traefik.http.routers.apprise-insecure.entrypoints=web"
+
+
+  # https://bark.day.app/#/
+  bark-server:
+    image: finab/bark-server:v2.3.9
+    container_name: bark-server
+    networks:
+      - traefik-net
+    restart: unless-stopped
+    volumes:
+      - ./data/bark:/data
+    ports:
+      - 8181:8080
+
+
+
+networks:
+  traefik-net:
+    external: true
+    name: traefik-net
+
+
