@@ -1,0 +1,46 @@
+
+services:
+  zerobyte:
+    image: ghcr.io/nicotsx/zerobyte:v0.44.0
+    container_name: zerobyte
+    environment:
+      - TZ=${TZ}
+      - BASE_URL=${BASE_URL}
+      # Generate your own secret with `openssl rand -hex 32`
+      - APP_SECRET=${APP_SECRET}
+      - WEBHOOK_ALLOWED_ORIGINS=${WEBHOOK_ALLOWED_ORIGINS}
+      # for performance
+      - GOMAXPROCS=2
+      - TRUSTED_ORIGINS=${BASE_URL}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ~/docker/compose:/containers:ro
+      # backup and config on hdd
+      - ~/backups/zero:/var/lib/zerobyte
+      # Hosts rclone
+      - ~/.config/rclone:/root/.config/rclone
+      # data
+      - ./data/zerobyte:/var/lib/zerobyte
+    restart: unless-stopped
+    networks:
+      - traefik-net
+    labels:
+      - "traefik.enable=true"
+      # https
+      - "traefik.http.routers.zero.rule=host(`zero.home.arpa`)"
+      - "traefik.http.routers.zero.entrypoints=websecure"
+      - 'traefik.http.routers.zero.tls=true'
+      - "traefik.http.services.zero.loadbalancer.server.port=4096"
+      # http
+      - "traefik.http.routers.zero-insecure.rule=host(`zero.home.arpa`)"
+      - "traefik.http.routers.zero-insecure.entrypoints=web"
+
+
+networks:
+  traefik-net:
+    external: true
+    name: traefik-net
+
+
+
+
