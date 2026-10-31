@@ -1,0 +1,76 @@
+---
+services:
+  beszel:
+    image: henrygd/beszel:0.21.1
+    container_name: beszel
+    restart: unless-stopped
+    environment:
+      APP_URL: http://beszel.home.arpa
+      DISABLE_PASSWORD_AUTH: false
+    networks:
+      - traefik-net
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    ports:
+      - 8090:8090
+    volumes:
+      - ./data/beszel_data:/beszel_data
+    labels:
+      - "traefik.enable=true"
+      # https
+      - "traefik.http.routers.beszel.rule=host(`beszel.home.arpa`)"
+      - "traefik.http.routers.beszel.entrypoints=websecure"
+      - 'traefik.http.routers.beszel.tls=true'
+      - "traefik.http.services.beszel.loadbalancer.server.port=8090"
+      # http
+      - "traefik.http.routers.beszel-insecure.rule=host(`beszel.home.arpa`)"
+      - "traefik.http.routers.beszel-insecure.entrypoints=web"
+    healthcheck:
+      test: ['CMD', '/beszel', 'health', '--url', 'http://localhost:8090']
+      start_period: 5s
+      interval: 120s
+
+  beszel-agent:
+    image: henrygd/beszel-agent-intel:0.21.1
+    container_name: beszel-agent
+    restart: unless-stopped
+    network_mode: host
+    cap_add:
+      - CAP_PERFMON
+    devices:
+      - /dev/dri:/dev/dri
+    # networks:
+    #   - traefik-net
+    # dont need port when i am using network mode host
+    # ports:
+    #   - 45876:45876
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      # for nvme stat
+      - /mnt/media/beszel_data/part:/extra-filesystems/nvme0n1p2:ro
+      # hhd
+      - /home/.beszel/data/part:/extra-filesystems/sda1:ro
+      # systemd 
+      - /var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket:ro 
+    environment:
+      LISTEN: 45876
+      KEY: '${KEY}'
+      HUB_URL: 'http://beszel.home.arpa'
+      NETWORK: 'tcp'
+      FILESYSTEM: 'nvme0n1p2'
+      DISK_USAGE_CACHE: '5m'
+      GPU_COLLECTOR: intel_gpu_top
+      SKIP_GPU: false
+      # Do not remove quotes around the key
+      #KEY: 'UPDATE WITH YOUR PUBLIC KEY (copy from "Add system" dialog)'
+    healthcheck:
+      test: ['CMD', '/agent', 'health']
+      interval: 120s
+
+networks:
+  traefik-net:
+    external: true
+    name: traefik-net
+
+
+
