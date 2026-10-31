@@ -1,0 +1,95 @@
+
+services:
+  bazarr:
+    image: lscr.io/linuxserver/bazarr:1.6.2
+    container_name: bazarr
+    # depends_on:
+    #   - whisperasr
+    networks:
+      - traefik-net
+    environment:
+      - PUID=${UID}
+      - PGID=${GID}
+      - TZ=${TZ}
+    volumes:
+      - ./data/bazarr/config:/config
+      - ~/Public/Media:/data
+    ports:
+      - 6767:6767
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      # https
+      - "traefik.http.routers.bazarr.rule=Host(`bazarr.home.arpa`)"
+      - "traefik.http.routers.bazarr.entrypoints=websecure"
+      - 'traefik.http.routers.bazarr.tls=true'
+      - "traefik.http.services.bazarr.loadbalancer.server.port=6767"
+      # http
+      - "traefik.http.routers.bazarr-insecure.rule=Host(`bazarr.home.arpa`)"
+      - "traefik.http.routers.bazarr-insecure.entrypoints=web"
+
+
+  bazarr-manual:
+    image: lscr.io/linuxserver/bazarr:1.6.2
+    container_name: bazarr-manual
+    # depends_on:
+    #   - whisperasr
+    networks:
+      - traefik-net
+    environment:
+      - PUID=${UID}
+      - PGID=${GID}
+      - TZ=${TZ}
+    volumes:
+      - ./data/bazarr-manual/config:/config
+      - ~/Public/Media:/data
+    ports:
+      - 6762:6767
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      # https
+      - "traefik.http.routers.bazarr-manual.rule=Host(`bazarr-manual.home.arpa`)"
+      - "traefik.http.routers.bazarr-manual.entrypoints=websecure"
+      - 'traefik.http.routers.bazarr-manual.tls=true'
+      - "traefik.http.services.bazarr-manual.loadbalancer.server.port=6767"
+      # http
+      - "traefik.http.routers.bazarr-manual-insecure.rule=Host(`bazarr-manual.home.arpa`)"
+      - "traefik.http.routers.bazarr-manual-insecure.entrypoints=web"
+
+  # whisperasr:
+  #   image: onerahmet/openai-whisper-asr-webservice:v1.9.1
+  #   container_name: whisperasr
+  #   volumes:
+  #     - ./data/whisperasr/data:/data/whisper
+  #     - ./data/whisperasr/cache:/root/.cache/whisper
+  #   environment:
+  #     - ASR_MODEL_PATH=/data/whisper
+  #     # - ASR_ENGINE=faster_whisper
+  #     - ASR_ENGINE=whisperx
+  #     # - ASR_MODEL=small
+  #     # - ASR_MODEL=tiny.en
+  #     - ASR_MODEL=distil-small.en
+  #     - MODEL_IDLE_TIMEOUT=0
+  #     # Defaults to 16000. Default sample rate for audio input. 16 kHz is commonly used in speech-to-text tasks.
+  #     - SAMPLE_RATE=16000
+  #     - ASR_DEVICE=cpu
+  #     - ASR_QUANTIZATION=int8 
+  #     - HF_TOKEN=hf_XwRMyxMozIaOeMoKErKhWwNZ
+  #     # WhisperX
+  #     - SUBTITLE_MAX_LINE_WIDTH=1000
+  #     - SUBTITLE_MAX_LINE_COUNT=2
+  #     - SUBTITLE_HIGHLIGHT_WORDS=false
+  #   ports:
+  #     - 9001:9000
+  #   networks:
+  #     - traefik-net
+  #   restart: unless-stopped
+
+
+networks:
+  traefik-net:
+    external: true
+    name: traefik-net
+
+
