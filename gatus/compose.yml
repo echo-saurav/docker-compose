@@ -1,0 +1,39 @@
+
+services:
+  gatus:
+    image: twinproduction/gatus:v5.38.0
+    container_name: gatus
+    restart: unless-stopped
+    networks:
+      - traefik-net
+    ports:
+      - 9342:8080
+    volumes:
+      - ./config.yaml:/config/config.yaml
+      - ./data/gatus:/data
+    environment:
+      - APPRISE_WEBHOOK=${APPRISE_WEBHOOK}
+      # tacking sites
+      - GATUS_HOMEPAGE=${GATUS_HOMEPAGE}
+      - GATUS_JELLYFIN=${GATUS_JELLYFIN}
+      - GATUS_NEXTCLOUD=${GATUS_NEXTCLOUD}
+      - GATUS_IMMICH=${GATUS_IMMICH}
+      - GATUS_N8N=${GATUS_N8N}
+    labels:
+      - "traefik.enable=true"
+      # https
+      - "traefik.http.routers.gatus.rule=Host(`gatus.home.arpa`)"
+      - "traefik.http.routers.gatus.entrypoints=websecure"
+      - 'traefik.http.routers.gatus.tls=true'
+      - "traefik.http.services.gatus.loadbalancer.server.port=8080"
+      # http
+      - "traefik.http.routers.gatus-insecure.rule=Host(`gatus.home.arpa`)"
+      - "traefik.http.routers.gatus-insecure.entrypoints=web"
+
+
+
+networks:
+  traefik-net:
+    external: true
+    name: traefik-net
+

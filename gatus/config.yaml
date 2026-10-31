@@ -1,0 +1,130 @@
+client:
+  insecure: false
+  ignore-redirect: false
+  timeout: 60s
+
+storage:
+  type: sqlite
+  path: /data/data.db
+  caching: true
+
+alerting:
+  # discord:
+  #   webhook-url: "${DISCORD_WEBHOOK}"
+  #   default-alert:
+  #     enabled: true
+  #     description: "health check failed"
+  #     send-on-resolved: true
+  #     failure-threshold: 10
+  #     success-threshold: 1
+
+  customs:
+    url: "${APPRISE_WEBHOOK}"
+    method: "POST"
+    body: |
+      {
+        "body": "[ALERT_TRIGGERED_OR_RESOLVED]: [ENDPOINT_GROUP] - [ENDPOINT_NAME] - [ALERT_DESCRIPTION] - [RESULT_ERRORS]",
+        "tags": "update"
+      }
+    headers:
+      Content-Type: "application/json"
+    default-alert:
+      enabled: true
+      description: "health check failed"
+      send-on-resolved: true
+      failure-threshold: 10
+      success-threshold: 1
+
+
+
+# maintenance:
+#   start: 23:00
+#   duration: 10h
+#   timezone: "${TZ}"
+#   every: 
+
+endpoints:
+  # interval services
+  - name: homepage
+    url: "${GATUS_HOMEPAGE}"
+    group: Internal
+    interval: 60s
+    conditions:
+      - "[STATUS] == 200"
+    alerts:
+      - type: custom
+
+  - name: jellyfin
+    url: "${GATUS_JELLYFIN}"
+    group: Internal
+    interval: 60s
+    conditions:
+      - "[STATUS] == 200"
+    alerts:
+      - type: custom
+
+  - name: nextcloud
+    url: "${GATUS_NEXTCLOUD}"
+    group: Internal
+    interval: 60s
+    conditions:
+      - "[STATUS] == 200"
+    alerts:
+      - type: custom
+
+  - name: immich
+    url: "${GATUS_IMMICH}"
+    group: Internal
+    interval: 60s
+    conditions:
+      - "[STATUS] == 200"
+    alerts:
+      - type: custom
+
+
+  # External sites
+  - name: google
+    url: https://google.com
+    group: Public sites
+    interval: 60s
+    conditions:
+      - "[STATUS] == 200"
+    alerts:
+      - type: custom
+
+  - name: youtube
+    url: https://youtube.com
+    group: Public sites
+    interval: 60s
+    conditions:
+      - "[STATUS] == 200"
+    alerts:
+      - type: custom
+
+  - name: facebook
+    url: https://facebook.com
+    group: Public sites
+    interval: 60s
+    conditions:
+      - "[STATUS] == 200"
+    alerts:
+      - type: custom
+
+  - name: reddit
+    url: https://reddit.com
+    group: Public sites
+    interval: 60s
+    conditions:
+      - "[STATUS] == 200"
+    alerts:
+      - type: custom
+
+  - name: github
+    url: https://github.com
+    group: Public sites
+    interval: 60s
+    conditions:
+      - "[STATUS] == 200"
+    alerts:
+      - type: custom
+
