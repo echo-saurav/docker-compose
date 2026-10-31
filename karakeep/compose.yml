@@ -1,0 +1,67 @@
+
+services:
+  web:
+    container_name: karakeep-web
+    image: ghcr.io/karakeep-app/karakeep:${KARAKEEP_VERSION:-release}
+    restart: unless-stopped
+    volumes:
+      - ./data/web:/data
+      - ./data/cookies/cookies.json:/cookies/cookies.json
+    ports:
+      - 3555:3000
+    env_file:
+      - .env
+    environment:
+      MEILI_ADDR: http://meilisearch:7700
+      BROWSER_WEB_URL: http://chrome:9222
+      DATA_DIR: /data
+    networks:
+      - traefik-net
+    labels:
+      - "traefik.enable=true"
+      # https
+      - "traefik.http.routers.karakeep.rule=host(`${DUCK_KARA}`)"
+      - "traefik.http.routers.karakeep.entrypoints=websecure"
+      - 'traefik.http.routers.karakeep.tls=true'
+      - "traefik.http.routers.karakeep.tls.certresolver=myresolver"
+      - "traefik.http.services.karakeep.loadbalancer.server.port=3000"
+      # http
+      - "traefik.http.routers.karakeep-insecure.rule=host(`${DUCK_KARA}`)"
+      - "traefik.http.routers.karakeep-insecure.entrypoints=web"
+
+
+  # https://github.com/karakeep-app/karakeep/pkgs/container/karakeep-chrome
+  chrome:
+    image: ghcr.io/karakeep-app/karakeep-chrome:156.0.8078.47-r1
+    container_name: karakeep-chrome
+    restart: unless-stopped
+    networks:
+      - traefik-net
+    init: true
+    command:
+      - --disable-gpu
+      - --disable-dev-shm-usage
+      - --hide-scrollbars
+      - --disable-blink-features=AutomationControlled
+      - --window-size=1440,900
+
+
+  meilisearch:
+    container_name: karakeep-meilisearch
+    image: getmeili/meilisearch:v1.41.0
+    restart: unless-stopped
+    networks:
+      - traefik-net
+    env_file:
+      - .env
+    environment:
+      MEILI_NO_ANALYTICS: "true"
+    volumes:
+      - ./data/meilisearch:/meili_data
+
+
+networks:
+  traefik-net:
+    external: true
+    name: traefik-net
+
