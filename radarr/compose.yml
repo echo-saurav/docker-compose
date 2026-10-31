@@ -1,0 +1,62 @@
+
+services:
+  radarr:
+    container_name: radarr
+    image: lscr.io/linuxserver/radarr:6.4.4
+    networks:
+      - traefik-net
+    volumes:
+      - ~/Public/Media:/data
+      - ./data/radarr:/config
+    ports:
+      - 8082:7878
+    environment:
+      - PUID=${UID}
+      - PGID=${GID}
+      - TZ=${TZ}
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      # https
+      - "traefik.http.routers.radarr.rule=Host(`radarr-auto.home.arpa`)"
+      - "traefik.http.routers.radarr.entrypoints=websecure"
+      - 'traefik.http.routers.radarr.tls=true'
+      - "traefik.http.services.radarr.loadbalancer.server.port=7878"
+      # http
+      - "traefik.http.routers.radarr-insecure.rule=Host(`radarr-auto.home.arpa`)"
+      - "traefik.http.routers.radarr-insecure.entrypoints=web"
+
+
+  radarr-manual:
+    container_name: radarr-manual
+    image: lscr.io/linuxserver/radarr:6.4.4
+    networks:
+      - traefik-net
+    volumes:
+      - ~/Public/Media:/data
+      - ./data/radarr-manual:/config
+    ports:
+      - 8043:7878
+    environment:
+      - PUID=${UID}
+      - PGID=${GID}
+      - TZ=${TZ}
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      # https
+      - "traefik.http.routers.radarr-manual.rule=Host(`radarr.home.arpa`)"
+      - "traefik.http.routers.radarr-manual.entrypoints=websecure"
+      - 'traefik.http.routers.radarr-manual.tls=true'
+      - "traefik.http.services.radarr-manual.loadbalancer.server.port=7878"
+      # http
+      - "traefik.http.routers.radarr-manual-insecure.rule=Host(`radarr.home.arpa`)"
+      - "traefik.http.routers.radarr-manual-insecure.entrypoints=web"
+
+
+
+networks:
+  traefik-net:
+    external: true
+    name: traefik-net
+
