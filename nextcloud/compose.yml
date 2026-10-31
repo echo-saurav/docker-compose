@@ -1,0 +1,112 @@
+
+services:
+  nextcloud:
+    image: linuxserver/nextcloud:35.0.2
+    container_name: nextcloud
+    depends_on:
+      - postgres
+      - nextcloud-whiteboard-server
+    environment:
+      - PUID=${UID}
+      - PGID=${GID}
+      - TZ=${TZ}
+    volumes:
+      - ./data/nextcloud-config/:/config
+      - ./data/nextcloud-data/:/data
+    ports:
+      - 3982:443
+    networks:
+      - traefik-net
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      # duck dns
+      - "traefik.http.routers.nextcloud.rule=Host(`${DUCK_NEXT}`)"
+      - "traefik.http.routers.nextcloud.entrypoints=websecure"
+      - "traefik.http.routers.nextcloud.tls=true"
+      - "traefik.http.services.nextcloud.loadbalancer.server.port=443"
+      # duck dns ssl
+      - "traefik.http.routers.nextcloud.tls.certresolver=myresolver"
+      # # ignore nextcloud's https
+      - "traefik.http.services.nextcloud.loadbalancer.serverstransport=ignorecert@file"
+      - "traefik.http.services.nextcloud.loadbalancer.server.scheme=https"
+      # http
+      - "traefik.http.routers.nextcloud-insecure.rule=Host(`${DUCK_NEXT}`)"
+      - "traefik.http.routers.nextcloud-insecure.entrypoints=web"
+      # nextcloud thing
+      # Middleware for setting the X-Frame-Options header
+      - "traefik.http.middlewares.next_hsts.headers.framedeny=false"
+      - "traefik.http.middlewares.next_hsts.headers.customFrameOptionsValue=sameorigin"
+      - "traefik.http.middlewares.next_hsts.headers.browserxssfilter=true"
+      - "traefik.http.middlewares.next_hsts.headers.STSPreload=true"
+      - "traefik.http.middlewares.next_hsts.headers.STSSeconds=31536000"
+      # reverse proxy ,cal dev
+      - "traefik.http.middlewares.nextcloud_redirectregex.redirectregex.permanent=true"
+      - "traefik.http.middlewares.nextcloud_redirectregex.redirectregex.regex='https://(.*)/.well-known/(?:card|cal)dav'"
+      - "traefik.http.middlewares.nextcloud_redirectregex.redirectregex.replacement='https://$${1}/remote.php/dav'"
+      # set middlewares
+      - "traefik.http.routers.nextcloud.middlewares=nextcloud_redirectregex,next_hsts"
+      - "traefik.http.routers.nextcloud-insecure.middlewares=nextcloud_redirectregex,next_hsts"
+      - "traefik.http.routers.nextcloud-local.middlewares=nextcloud_redirectregex,next_hsts"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/status.php"]
+      interval: 60s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+
+  postgres:
+    image: postgres:16-alpine 
+    container_name: postgres-nextcloud
+    command:
+      -c shared_buffers=256MB
+      -c max_connections=200
+    restart: unless-stopped
+    networks:
+      - traefik-net
+    volumes:
+      - ./data/postgres/:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=postgres-nextcloud
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=nextcloud
+      - TZ=${TZ}
+    healthcheck:
+      test: ["CMD-SHELL", "sh -c pg_isready -U oc_saurav -d nextcloud"]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+      start_period: 80s 
+
+
+  nextcloud-whiteboard-server:
+    image: ghcr.io/nextcloud-releases/whiteboard:v2.1.2
+    restart: unless-stopped
+    container_name: whiteboard-next
+    networks:
+      - traefik-net
+    ports:
+      - 3102:3002
+    environment:
+      - NEXTCLOUD_URL=https://${DUCK_NEXT}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+    labels:
+      - "traefik.enable=true"
+      # duck dns
+      # https
+      - "traefik.http.routers.whiteboard.rule=Host(`${DUCK_NEXT}`) && PathPrefix(`/whiteboard`)"
+      - "traefik.http.routers.whiteboard.entrypoints=websecure"
+      - 'traefik.http.routers.whiteboard.tls=true' 
+      - "traefik.http.services.whiteboard.loadbalancer.server.port=3002"
+      # middlewares
+      - "traefik.http.middlewares.whiteboard-strip.stripprefix.prefixes=/whiteboard"
+      - "traefik.http.routers.whiteboard.middlewares=whiteboard-strip"
+
+
+networks:
+  traefik-net:
+    external: true
+    name: traefik-net
+
+
