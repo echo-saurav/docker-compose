@@ -1,0 +1,92 @@
+
+services:
+  audiomuse-ai:
+    image: ghcr.io/neptunehub/audiomuse-ai:3.7.0
+    container_name: audiomuse-ai
+    ports:
+      - "${FRONTEND_PORT:-8000}:8000"
+    environment:
+      SERVICE_TYPE: "flask"
+      TZ: ${TZ}
+      # DATABASE_URL is now constructed by config.py from the following:
+      POSTGRES_USER: ${POSTGRES_USER:-audiomuse}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-audiomusepassword}
+      POSTGRES_DB: "audiomusedb"
+      # POSTGRES_HOST: "postgres" # Service name of the postgres container
+      POSTGRES_HOST: "audiomuse-postgres" # Service name of the postgres container
+      POSTGRES_PORT: "5432" # Internal port - always 5432 inside the Docker network
+      TEMP_DIR: "/app/temp_audio"
+    env_file:
+      - .env
+    volumes:
+      - ./data/audiomuse/temp-audio-flask:/app/temp_audio
+      - ./data/audiomuse/plugins-flask:/app/plugin/installed
+    depends_on:
+      - postgres
+    restart: unless-stopped
+    networks:
+      - traefik-net
+    labels:
+      - "traefik.enable=true"
+      # https
+      - "traefik.http.routers.audioai.rule=Host(`audioai.home.arpa`)"
+      - "traefik.http.routers.audioai.entrypoints=websecure"
+      - 'traefik.http.routers.audioai.tls=true'
+      - "traefik.http.services.audioai.loadbalancer.server.port=8000"
+      # http
+      - "traefik.http.routers.audioai-insecure.rule=Host(`audioai.home.arpa`)"
+      - "traefik.http.routers.audioai-insecure.entrypoints=web"
+
+
+  audiomuse-worker:
+    image: ghcr.io/neptunehub/audiomuse-ai:3.7.0
+    container_name: audiomuse-worker
+    networks:
+      - traefik-net
+    env_file:
+      - .env
+    environment:
+      SERVICE_TYPE: "worker"
+      TZ: ${TZ}
+      # DATABASE_URL is now constructed by config.py from the following:
+      POSTGRES_USER: ${POSTGRES_USER:-audiomuse}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-audiomusepassword}
+      POSTGRES_DB: "audiomusedb"
+      # POSTGRES_HOST: "postgres" # Service name of the postgres container
+      POSTGRES_HOST: "audiomuse-postgres" # Service name of the postgres container
+      POSTGRES_PORT: "5432" # Internal port - always 5432 inside the Docker network
+      TEMP_DIR: "/app/temp_audio"
+    volumes:
+      - ./data/audiomuse/temp-audio-worker:/app/temp_audio
+      - ./data/audiomuse/plugins-worker:/app/plugin/installed
+    depends_on:
+      - postgres
+    restart: unless-stopped
+
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: audiomuse-postgres
+    environment:
+      TZ: ${TZ}
+      POSTGRES_USER: ${POSTGRES_USER:-audiomuse}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-audiomusepassword}
+      POSTGRES_DB: "audiomusedb"
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432" 
+    volumes:
+      - ./data/audiomuse/postgres-data:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - traefik-net
+
+
+networks:
+  traefik-net:
+    external: true
+    name: traefik-net
+
+
+
+
+
