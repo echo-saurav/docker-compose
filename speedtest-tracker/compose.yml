@@ -1,0 +1,53 @@
+
+services:
+  speedtest-tracker:
+    image: lscr.io/linuxserver/speedtest-tracker:1.15.1
+    container_name: speedtest-tracker
+    networks:
+      - traefik-net
+    environment:
+      # https://docs.speedtest-tracker.dev/getting-started/environment-variables
+      - PUID=${UID}
+      - PGID=${GID}
+      - APP_TIMEZONE=${TZ}
+      - DISPLAY_TIMEZONE=${TZ}
+      # https://crontab.guru/every-hour
+      - SPEEDTEST_SCHEDULE="0 * * * *"
+      - PRUNE_RESULTS_OLDER_THAN=90
+      - PUBLIC_DASHBOARD=true
+      # get server list from here 
+      # https://c.speedtest.net/speedtest-servers-static.php
+      # my list:
+      # 7002 - name="Agartala" country="India" cc="IN" sponsor="BHARAT SANCHAR NIGAM LTD" id="7002" host="bsnlooklaagt.mywire.org:8080"
+      # 53548 - name="Cumilla" country="Bangladesh" cc="BD" sponsor="KR-Online" id="53548" host="speedtest.ispwifibd.net:8080"
+      # or use docker command
+      # docker exec speedtest-tracker php /app/www/artisan app:ookla-list-servers
+      - SPEEDTEST_SERVERS="7002,53548"
+      - DB_CONNECTION=sqlite
+      # echo "base64:$(openssl rand -base64 32 2>/dev/null)"
+      # - APP_KEY=${SPEEDTEST_APP_KEY}
+      - APP_KEY=${APP_KEY}
+      - APP_URL=http://speed.home.arpa
+    volumes:
+      - ./data/speed:/config
+    ports:
+      - 5487:80
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      # https
+      - "traefik.http.routers.speed-test.rule=host(`speed.home.arpa`)"
+      - "traefik.http.routers.speed-test.entrypoints=websecure"
+      - 'traefik.http.routers.speed-test.tls=true'
+      - "traefik.http.services.speed-test.loadbalancer.server.port=80"
+      # http
+      - "traefik.http.routers.speed-test-insecure.rule=host(`speed.home.arpa`)"
+      - "traefik.http.routers.speed-test-insecure.entrypoints=web"
+
+
+networks:
+  traefik-net:
+    external: true
+    name: traefik-net
+
+
