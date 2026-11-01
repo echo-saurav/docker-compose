@@ -12,6 +12,7 @@ services:
       - DUCKDNS_TOKEN=${DUCKDNS_TOKEN}
       - DUCKDNS_EMAIL=${DUCKDNS_EMAIL}
       - OTHER_EMAIL=${OTHER_EMAIL}
+      - FREE_DNS_EMAIL=${FREE_DNS_EMAIL}
     volumes:
       - ./traefik.yml:/etc/traefik/traefik.yml
       - ./data/mkcert:/mkcert

@@ -59,6 +59,13 @@ certificatesResolvers:
       email: "${OTHER_EMAIL}"
       storage: /letsencrypt/acme.json
 
+  freedns:
+    acme:
+      email: "${FREE_DNS_EMAIL}"
+      storage: /letsencrypt/acme-freedns.json
+      httpChallenge:
+        entryPoint: web
+
 tls:
   stores:
     default:
