@@ -1,0 +1,39 @@
+
+services:
+  audiobookshelf:
+    image: ghcr.io/advplyr/audiobookshelf:2.37.2
+    container_name: audiobookshelf
+    networks:
+      - traefik-net
+    ports:
+      - 13378:80
+    volumes:
+      - ./data/audiobook/config:/config
+      - ./data/audiobook/metadata:/metadata
+      - ~/Public/Media/AudioBooks:/audiobooks
+      - ~/Public/Media/ConvertedBooks:/convert-audiobook
+      - ~/Public/Media/Podcasts:/Podcasts
+    environment:
+      - TZ=${TZ}
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      # https
+      - "traefik.http.routers.audiobook.rule=host(`audiobook.home.arpa`)"
+      - "traefik.http.routers.audiobook.entrypoints=websecure"
+      - "traefik.http.routers.audiobook.tls=true"
+      - "traefik.http.services.audiobook.loadbalancer.server.port=80"
+      # http
+      - "traefik.http.routers.audiobook-insecure.rule=host(`audiobook.home.arpa`)"
+      - "traefik.http.routers.audiobook-insecure.entrypoints=web"
+
+
+networks:
+  traefik-net:
+    external: true
+    name: traefik-net
+
+
+
+
+
