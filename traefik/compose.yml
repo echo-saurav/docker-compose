@@ -1,0 +1,52 @@
+---
+services:
+  traefik:
+    image: traefik:v3.7
+    container_name: traefik
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+      - 8080:8080
+    environment:
+      - DUCKDNS_TOKEN=${DUCKDNS_TOKEN}
+      - DUCKDNS_EMAIL=${DUCKDNS_EMAIL}
+      - OTHER_EMAIL=${OTHER_EMAIL}
+    volumes:
+      - ./traefik.yml:/etc/traefik/traefik.yml
+      - ./data/mkcert:/mkcert
+      - ./data/letsencrypt:/letsencrypt
+      - ./data/logs:/logs
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+     - traefik-net
+    labels:
+      - traefik.enable=true
+      # https
+      - traefik.http.routers.traefik.rule=Host(`traefik.home.arpa`)
+      - traefik.http.routers.traefik.entrypoints=websecure
+      - traefik.http.routers.traefik.tls=true
+      - traefik.http.services.traefik.loadbalancer.server.port=8080
+      # http
+      - traefik.http.routers.traefik-insecure.rule=Host(`traefik.home.arpa`)
+      - traefik.http.routers.traefik-insecure.entrypoints=web
+
+
+  mkcert:
+    image: vishnunair/docker-mkcert
+    restart: always
+    container_name: mkcert
+    networks:
+      - traefik-net
+    environment:
+      - domain=*.home.arpa
+    volumes:
+      - ./data/mkcert:/root/.local/share/mkcert
+
+networks:
+  traefik-net:
+    name: traefik-net
+
+
+
+

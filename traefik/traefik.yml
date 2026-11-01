@@ -1,0 +1,80 @@
+global:
+  checkNewVersion: false
+  sendAnonymousUsage: false
+#
+# log:
+#   level: INFO  # DEBUG, INFO, WARNING, ERROR, CRITICAL
+#   format:  json # common, json, logfmt
+#   filePath: /log/traefik.log
+#
+# accesslog:
+#   format: json # common, json, logfmt
+#   filePath: /log/access.log
+#   fields:
+#     headers:
+#       defaultMode: keep
+
+api:
+ dashboard: true
+ insecure: true
+
+entryPoints:
+  dns:
+    address: :53
+
+  udpdns:
+    address: :53/udp
+
+  web:
+    address: :80
+    transport:
+      respondingTimeouts:
+        readTimeout: 600s
+        idleTimeout: 600s
+
+    ## (Optional) Redirect to HTTPS
+    # http:
+    #   redirections:
+    #     entryPoint:
+    #       to: websecure
+    #       scheme: https
+
+  websecure:
+    address: :443
+    transport:
+      respondingTimeouts:
+        readTimeout: 600s
+        idleTimeout: 600s
+
+
+  grpc:
+    address: :50051 # Example port for the gRPC entrypoint
+
+certificatesResolvers:
+  myresolver:
+    acme:
+      dnsChallenge:
+        provider: duckdns
+        disablePropagationCheck: true
+      email: "${OTHER_EMAIL}"
+      storage: /letsencrypt/acme.json
+
+tls:
+  stores:
+    default:
+      defaultCertificate:
+        certFile: /mkcert/_wildcard.home.arpa.pem
+        keyFile: /mkcert/_wildcard.home.arpa-key.pem
+
+providers:
+  docker:
+    exposedByDefault: false  # Default is true
+  file:
+    directory: /etc/traefik
+    watch: true
+
+http:
+  serversTransports:
+    ignorecert:
+      insecureSkipVerify: true
+
