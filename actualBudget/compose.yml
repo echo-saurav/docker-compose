@@ -1,0 +1,38 @@
+
+services:
+  actual_server:
+    container_name: actualBudget
+    image: docker.io/actualbudget/actual-server:26.10.0
+    ports:
+      - 5006:5006
+    # environment:
+      # See all options and more details at https://actualbudget.org/docs/config/
+    volumes:
+      - ./data:/data
+    restart: unless-stopped
+    networks:
+      - traefik-net
+    labels:
+      - "traefik.enable=true"
+      # https
+      - "traefik.http.routers.actual.rule=host(`actual.home.arpa`)"
+      - "traefik.http.routers.actual.entrypoints=websecure"
+      - 'traefik.http.routers.actual.tls=true'
+      - "traefik.http.services.actual.loadbalancer.server.port=5006"
+      # http
+      - "traefik.http.routers.actual-insecure.rule=host(`actual.home.arpa`)"
+      - "traefik.http.routers.actual-insecure.entrypoints=web"
+    healthcheck:
+      test: ['CMD-SHELL', 'node scripts/health-check.js']
+      # health check using self signed certs
+      # test: ['CMD-SHELL', 'NODE_EXTRA_CA_CERTS=/data/selfhost.crt node scripts/health-check.js']
+      interval: 60s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+
+networks:
+  traefik-net:
+    external: true
+    name: traefik-net
+
