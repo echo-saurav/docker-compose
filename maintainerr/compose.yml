@@ -1,0 +1,42 @@
+
+services:
+  maintainerr:
+    # image: ghcr.io/maintainerr/maintainerr:3.13.0
+    image: ghcr.io/maintainerr/maintainerr:3.31.0
+    container_name: maintainerr
+    user: ${UID}:${GID}
+    volumes:
+      - ~/Public/Media:/opt/data
+    environment:
+      - TZ=${TZ}
+      - TELEMETRY=off
+    ports:
+      - 6246:6246
+    restart: unless-stopped
+    networks:
+      - traefik-net
+    labels:
+      - "traefik.enable=true"
+      # https
+      - "traefik.http.routers.maintain.rule=host(`maintain.home.arpa`)"
+      - "traefik.http.routers.maintain.entrypoints=websecure"
+      - 'traefik.http.routers.maintain.tls=true'
+      - "traefik.http.services.maintain.loadbalancer.server.port=6246"
+      # http
+      - "traefik.http.routers.maintain-insecure.rule=host(`maintain.home.arpa`)"
+      - "traefik.http.routers.maintain-insecure.entrypoints=web"
+    healthcheck:
+      test: ['CMD', '/opt/app/healthcheck.sh']
+      interval: 60s
+      timeout: 5s
+      start_period: 40s
+      retries: 3
+
+
+networks:
+  traefik-net:
+    external: true
+    name: traefik-net
+
+
+
