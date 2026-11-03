@@ -1,0 +1,82 @@
+---
+services:
+  webtop:
+    # image: lscr.io/linuxserver/webtop:latest
+    # image: lscr.io/linuxserver/webtop:arch-kde
+    image: lscr.io/linuxserver/chromium:latest
+    container_name: webtop
+    networks:
+      - traefik-net
+    security_opt:
+      - seccomp:unconfined #optional
+    environment:
+      - PUID=${UID}
+      - PGID=${GID}
+      - TZ=${TZ}
+      - SUBFOLDER=/ #optional
+      # - SUBFOLDER=/webtop #optional
+      - TITLE=Arch #optional
+      - CUSTOM_USER=${WEBTOP_USER}
+      - PASSWORD=${WEBTOP_PASS}
+    volumes:
+      - ./data/webtop:/config
+      #- /dev/dri:/dev/dri
+      #- /dev/snd:/dev/snd
+      # - /var/run/docker.sock:/var/run/docker.sock #optional
+    ports:
+      - 3757:3000
+      - 3011:3001
+    devices:
+      - /dev/dri:/dev/dri
+      - /dev/snd:/dev/snd
+    shm_size: "1gb"
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      # https
+      - "traefik.http.routers.webtop.rule=Host(`webtop.home.arpa`)"
+      - "traefik.http.routers.webtop.entrypoints=websecure"
+      - "traefik.http.routers.webtop.tls=true"
+      - "traefik.http.services.webtop.loadbalancer.server.port=3001"
+      # # ignore https
+      - "traefik.http.services.webtop.loadbalancer.serverstransport=ignorecert@file"
+      - "traefik.http.services.webtop.loadbalancer.server.scheme=https"
+      # http
+      - "traefik.http.routers.webtop-insecure.rule=Host(`webtop.home.arpa`)"
+      - "traefik.http.routers.webtop-insecure.entrypoints=web"
+      # Attach middleware to the router
+      - "traefik.http.routers.webtop.middlewares=my_custom_headers"
+
+      # Define middleware to add security headers
+      - "traefik.http.middlewares.my_custom_headers.headers.customresponseheaders.Cross-Origin-Embedder-Policy=require-corp"
+      - "traefik.http.middlewares.my_custom_headers.headers.customresponseheaders.Cross-Origin-Opener-Policy=same-origin"
+      - "traefik.http.middlewares.my_custom_headers.headers.customresponseheaders.Cross-Origin-Resource-Policy=same-site"
+
+      # high quality stream
+      # Attach the headers middleware to the router
+      #- "traefik.http.routers.webtop.middlewares=my_custom_headers"
+      # Define the middleware for setting security headers
+      #- "traefik.http.middlewares.my_custom_headers.headers.crossoriginembedderpolicy=require-corp"
+      #- "traefik.http.middlewares.my_custom_headers.headers.crossoriginopenerpolicy=same-origin"
+      #- "traefik.http.middlewares.my_custom_headers.headers.crossoriginresourcepolicy=same-site"
+
+
+    # labels:
+    #   - traefik.enable=true
+    #   # https
+    #   - traefik.http.routers.webtop.rule=Host(`${DUCK_BASE}`) && (PathPrefix(`/public`) || PathPrefix(`/webtop`) || PathPrefix(`/vnc`) || PathPrefix(`/webtopaudio`) || PathPrefix(`/websockify`) || PathPrefix(`/files`) || PathPrefix(`/audio`))
+    #   - traefik.http.routers.webtop.entrypoints=websecure
+    #   - traefik.http.routers.webtop.tls=true
+    #   - traefik.http.services.webtop.loadbalancer.server.port=3000
+    #   - traefik.http.middlewares.web-strip.stripprefix.prefixes=/webtop
+    #   - traefik.http.routers.webtop.middlewares=web-strip
+    #   # http
+    #   - traefik.http.routers.webtop-insecure.rule=Host(`${DUCK_BASE}`) && (PathPrefix(`/public`) || PathPrefix(`/webtop`) || PathPrefix(`/vnc`) || PathPrefix(`/webtopaudio`) || PathPrefix(`/websockify`) || PathPrefix(`/files`) || PathPrefix(`/audio`))
+    #   - traefik.http.routers.webtop-insecure.entrypoints=web
+    #   - traefik.http.routers.webtop-insecure.middlewares=web-strip
+
+networks:
+  traefik-net:
+    external: true
+    name: traefik-net
+
