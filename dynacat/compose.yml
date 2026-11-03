@@ -1,0 +1,39 @@
+---
+services:
+  dynacat:
+    container_name: dynacat
+    image: panonim/dynacat:3.0.2
+    restart: unless-stopped
+    volumes:
+      - ./data/config:/app/config:ro
+      - ./data/assets:/app/assets:ro
+      - ./data/cache:/app/cache
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      - PUID=${UID}
+      - PGID=${GID}
+    ports:
+      - 7772:8080
+    env_file:
+      - .env
+    networks:
+      - traefik-net
+    labels:
+      - "traefik.enable=true"
+      # https
+      - "traefik.http.routers.dynacat.rule=Host(`${DUCK_BASE}`)"
+      - "traefik.http.routers.dynacat.entrypoints=websecure"
+      - "traefik.http.routers.dynacat.tls=true"
+      - "traefik.http.routers.dynacat.tls.certresolver=myresolver"
+      - "traefik.http.services.dynacat.loadbalancer.server.port=8080"
+      # http
+      - "traefik.http.routers.dynacat-insecure.rule=Host(`${DUCK_BASE}`)"
+      - "traefik.http.routers.dynacat-insecure.entrypoints=web"
+
+networks:
+  traefik-net:
+    external: true
+    name: traefik-net
+
+
