@@ -46,7 +46,7 @@ services:
       # dynacat
       - "dynacat.name=Openspeed Tracker"
       - "dynacat.icon=di:speedtest-tracker"
-      - "dynacat.url=https://speed.home.arpa"
+      - "dynacat.url=http://speed.home.arpa"
       - "dynacat.description=track speed"
       - "dynacat.category=tools"
       - "dynacat.id=openspeed-tracker"
