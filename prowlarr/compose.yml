@@ -17,12 +17,12 @@ services:
     labels:
       - "traefik.enable=true"
       # https
-      - "traefik.http.routers.prowlarr.rule=host(`prowlarr.home.arpa`)"
+      - "traefik.http.routers.prowlarr.rule=Host(`prowlarr.home.arpa`)"
       - "traefik.http.routers.prowlarr.entrypoints=websecure"
       - 'traefik.http.routers.prowlarr.tls=true' 
       - "traefik.http.services.prowlarr.loadbalancer.server.port=9696"
       # http
-      - "traefik.http.routers.prowlarr-insecure.rule=host(`prowlarr.home.arpa`)"
+      - "traefik.http.routers.prowlarr-insecure.rule=Host(`prowlarr.home.arpa`)"
       - "traefik.http.routers.prowlarr-insecure.entrypoints=web"
       # dynacat
       - "dynacat.name=Prowlarr"
