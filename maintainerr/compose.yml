@@ -27,7 +27,7 @@ services:
       # dynacat
       - "dynacat.name=Maintainerr"
       - "dynacat.icon=sh:maintainerr"
-      - "dynacat.url=https://maintain.home.arpa"
+      - "dynacat.url=http://maintain.home.arpa"
       - "dynacat.description=maintain arrs"
       - "dynacat.category=tools"
       - "dynacat.id=maintainerr"
