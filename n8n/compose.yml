@@ -57,7 +57,7 @@ services:
       # dynacat
       - "dynacat.name=n8n"
       - "dynacat.icon=sh:n8n"
-      - "dynacat.url=https://n8n.home.arpa"
+      - "dynacat.url=http://n8n.home.arpa"
       - "dynacat.description=automations"
       - "dynacat.category=tools"
       - "dynacat.id=n8n"
