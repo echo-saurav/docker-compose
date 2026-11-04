@@ -32,7 +32,7 @@ services:
       # dynacat
       - "dynacat.name=Apprise"
       - "dynacat.icon=sh:apprise"
-      - "dynacat.url=https://apprise.home.arpa"
+      - "dynacat.url=http://apprise.home.arpa"
       - "dynacat.description=Notifications"
       - "dynacat.category=tools"
       - "dynacat.id=notification"
