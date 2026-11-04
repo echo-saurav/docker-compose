@@ -31,7 +31,7 @@ services:
       # dynacat
       - "dynacat.name=Adgurd"
       - "dynacat.icon=di:adguard-home"
-      - "dynacat.url=https://adguard.home.arpa"
+      - "dynacat.url=http://adguard.home.arpa"
       - "dynacat.description=Local DNS and ads blocker"
       - "dynacat.category=tools"
       - "dynacat.id=adguard"
