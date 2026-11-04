@@ -18,12 +18,12 @@ services:
     labels:
       - "traefik.enable=true"
       # https
-      - "traefik.http.routers.beszel.rule=host(`beszel.home.arpa`)"
+      - "traefik.http.routers.beszel.rule=Host(`beszel.home.arpa`)"
       - "traefik.http.routers.beszel.entrypoints=websecure"
       - 'traefik.http.routers.beszel.tls=true'
       - "traefik.http.services.beszel.loadbalancer.server.port=8090"
       # http
-      - "traefik.http.routers.beszel-insecure.rule=host(`beszel.home.arpa`)"
+      - "traefik.http.routers.beszel-insecure.rule=Host(`beszel.home.arpa`)"
       - "traefik.http.routers.beszel-insecure.entrypoints=web"
       # dynacat
       - "dynacat.name=Beszel"
