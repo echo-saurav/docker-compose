@@ -17,12 +17,12 @@ services:
     labels:
       - "traefik.enable=true"
       # https
-      - "traefik.http.routers.dockhand.rule=host(`dockhand.home.arpa`)"
+      - "traefik.http.routers.dockhand.rule=Host(`dockhand.home.arpa`)"
       - "traefik.http.routers.dockhand.entrypoints=websecure"
       - "traefik.http.routers.dockhand.tls=true"
       - "traefik.http.services.dockhand.loadbalancer.server.port=3000"
       # http
-      - "traefik.http.routers.dockhand-insecure.rule=host(`dockhand.home.arpa`)"
+      - "traefik.http.routers.dockhand-insecure.rule=Host(`dockhand.home.arpa`)"
       - "traefik.http.routers.dockhand-insecure.entrypoints=web"
       # dynacat
       - "dynacat.name=Dockhand"
