@@ -84,7 +84,7 @@ services:
       # dynacat
       - "dynacat.name=Fitness"
       - "dynacat.icon=sh:sparkyfitness"
-      - "dynacat.url=${DUCK_FITNESS_BASE}"
+      - "dynacat.url=https://${DUCK_FITNESS_BASE}"
       - "dynacat.description=fitness and health monitoring"
       - "dynacat.category=tools"
       - "dynacat.id=fitness"
