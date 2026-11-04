@@ -29,10 +29,10 @@ services:
       - "traefik.http.routers.gitea-insecure.rule=Host(`gitea.home.arpa`)"
       - "traefik.http.routers.gitea-insecure.entrypoints=web"
       # dynacat
-      - "dynacat.name=Giea"
+      - "dynacat.name=Gitea"
       - "dynacat.icon=sh:gitea"
-      - "dynacat.url=https://gitea.home.arpa"
-      - "dynacat.description=Local Git"
+      - "dynacat.url=http://gitea.home.arpa"
+      - "dynacat.description=Local git alternative"
       - "dynacat.category=tools"
       - "dynacat.id=gitea"
       - "dynacat.hide=false"
