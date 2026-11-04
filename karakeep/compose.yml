@@ -20,13 +20,13 @@ services:
     labels:
       - "traefik.enable=true"
       # https
-      - "traefik.http.routers.karakeep.rule=host(`${DUCK_KARA}`)"
+      - "traefik.http.routers.karakeep.rule=Host(`${DUCK_KARA}`)"
       - "traefik.http.routers.karakeep.entrypoints=websecure"
       - 'traefik.http.routers.karakeep.tls=true'
       - "traefik.http.routers.karakeep.tls.certresolver=myresolver"
       - "traefik.http.services.karakeep.loadbalancer.server.port=3000"
       # http
-      - "traefik.http.routers.karakeep-insecure.rule=host(`${DUCK_KARA}`)"
+      - "traefik.http.routers.karakeep-insecure.rule=Host(`${DUCK_KARA}`)"
       - "traefik.http.routers.karakeep-insecure.entrypoints=web"
       # dynacat
       - "dynacat.name=Karakeep"
