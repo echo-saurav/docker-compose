@@ -22,12 +22,12 @@ services:
     labels:
       - "traefik.enable=true"
       # https
-      - "traefik.http.routers.apprise.rule=host(`apprise.home.arpa`)"
+      - "traefik.http.routers.apprise.rule=Host(`apprise.home.arpa`)"
       - "traefik.http.routers.apprise.entrypoints=websecure"
       - 'traefik.http.routers.apprise.tls=true'
       - "traefik.http.services.apprise.loadbalancer.server.port=8000"
       # http
-      - "traefik.http.routers.apprise-insecure.rule=host(`apprise.home.arpa`)"
+      - "traefik.http.routers.apprise-insecure.rule=Host(`apprise.home.arpa`)"
       - "traefik.http.routers.apprise-insecure.entrypoints=web"
       # dynacat
       - "dynacat.name=Apprise"
