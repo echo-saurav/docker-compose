@@ -27,8 +27,8 @@ services:
       # dynacat
       - "dynacat.name=Filebrowser"
       - "dynacat.icon=di:filebrowser-quantum"
-      - "dynacat.url=https://file.home.arpa"
-      - "dynacat.description=file"
+      - "dynacat.url=http://file.home.arpa"
+      - "dynacat.description=file access"
       - "dynacat.category=tools"
       - "dynacat.id=filebrowser-quantum"
       - "dynacat.hide=false"
