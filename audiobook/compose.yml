@@ -19,12 +19,12 @@ services:
     labels:
       - "traefik.enable=true"
       # https
-      - "traefik.http.routers.audiobook.rule=host(`audiobook.home.arpa`)"
+      - "traefik.http.routers.audiobook.rule=Host(`audiobook.home.arpa`)"
       - "traefik.http.routers.audiobook.entrypoints=websecure"
       - "traefik.http.routers.audiobook.tls=true"
       - "traefik.http.services.audiobook.loadbalancer.server.port=80"
       # http
-      - "traefik.http.routers.audiobook-insecure.rule=host(`audiobook.home.arpa`)"
+      - "traefik.http.routers.audiobook-insecure.rule=Host(`audiobook.home.arpa`)"
       - "traefik.http.routers.audiobook-insecure.entrypoints=web"
       # dynacat
       - "dynacat.name=AudioBookShelf"
