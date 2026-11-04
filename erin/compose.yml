@@ -1,4 +1,4 @@
-
+---
 services:
   erin:
     container_name: erin
@@ -20,14 +20,14 @@ services:
     networks:
       - traefik-net
     labels:
-      - "traefik.enable=true"  
+      - "traefik.enable=true"
       # https
-      - "traefik.http.routers.erin.rule=host(`erin.home.arpa`)"
+      - "traefik.http.routers.erin.rule=Host(`erin.home.arpa`)"
       - "traefik.http.routers.erin.entrypoints=websecure"
       - 'traefik.http.routers.erin.tls=true'
       - "traefik.http.services.erin.loadbalancer.server.port=4232"
       # http
-      - "traefik.http.routers.erin-insecure.rule=host(`erin.home.arpa`)"
+      - "traefik.http.routers.erin-insecure.rule=Host(`erin.home.arpa`)"
       - "traefik.http.routers.erin-insecure.entrypoints=web"
 
 networks:
