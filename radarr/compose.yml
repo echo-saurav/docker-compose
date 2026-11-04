@@ -28,7 +28,7 @@ services:
       # dynacat
       - "dynacat.name=Radarr"
       - "dynacat.icon=sh:radarr"
-      - "dynacat.url=https://radarr-auto.home.arpa"
+      - "dynacat.url=http://radarr-auto.home.arpa"
       - "dynacat.description=Movies arr"
       - "dynacat.category=arr"
       - "dynacat.id=radarr"
@@ -65,7 +65,7 @@ services:
       # dynacat
       - "dynacat.name=Radarr Manual"
       - "dynacat.icon=sh:radarr"
-      - "dynacat.url=https://radarr.home.arpa"
+      - "dynacat.url=http://radarr.home.arpa"
       - "dynacat.description=Movies arr"
       - "dynacat.category=arr"
       - "dynacat.id=radarr-manual"
