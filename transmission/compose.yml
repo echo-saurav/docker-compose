@@ -42,7 +42,7 @@ services:
       # dynacat
       - "dynacat.name=Transmission"
       - "dynacat.icon=sh:transmission"
-      - "dynacat.url=https://transmission.home.arpa"
+      - "dynacat.url=http://transmission.home.arpa"
       - "dynacat.description=Downloader"
       - "dynacat.category=arr"
       - "dynacat.id=transmission"
