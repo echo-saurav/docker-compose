@@ -32,7 +32,7 @@ services:
       # dynacat
       - "dynacat.name=Gatus"
       - "dynacat.icon=sh:gatus"
-      - "dynacat.url=https://gatus.home.arpa"
+      - "dynacat.url=http://gatus.home.arpa"
       - "dynacat.description=service monitoring"
       - "dynacat.category=tools"
       - "dynacat.id=gatus"
