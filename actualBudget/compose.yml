@@ -2,7 +2,7 @@
 services:
   actual_server:
     container_name: actualBudget
-    image: docker.io/actualbudget/actual-server:26.10.0
+    image: docker.io/actualbudget/actual-server:26.11.0
     ports:
       - 5006:5006
     # environment:
@@ -15,16 +15,17 @@ services:
     labels:
       - "traefik.enable=true"
       # https
-      - "traefik.http.routers.actual.rule=host(`actual.home.arpa`)"
+      - "traefik.http.routers.actual.rule=Host(`actual.home.arpa`)"
       - "traefik.http.routers.actual.entrypoints=websecure"
-      - 'traefik.http.routers.actual.tls=true'
+      - "traefik.http.routers.actual.tls=true"
       - "traefik.http.services.actual.loadbalancer.server.port=5006"
-      # http
-      - "traefik.http.routers.actual-insecure.rule=host(`actual.home.arpa`)"
-      - "traefik.http.routers.actual-insecure.entrypoints=web"
+      # # http
+      # - "traefik.http.routers.actual-insecure.rule=Host(`actual.home.arpa`)"
+      # - "traefik.http.routers.actual-insecure.entrypoints=web"
       # dynacat
       - "dynacat.name=Actual Budget"
       - "dynacat.icon=di:actual-budget"
+      # does not work without https
       - "dynacat.url=https://actual.home.arpa"
       - "dynacat.description=Spending monitoring"
       - "dynacat.category=tools"
