@@ -27,7 +27,7 @@ services:
       # dynacat
       - "dynacat.name=Profilarr"
       - "dynacat.icon=sh:profilarr"
-      - "dynacat.url=https://profilarr.home.arpa"
+      - "dynacat.url=http://profilarr.home.arpa"
       - "dynacat.description=manage arrs"
       - "dynacat.category=arr"
       - "dynacat.id=profilarr"
