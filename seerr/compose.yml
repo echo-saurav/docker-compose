@@ -29,7 +29,7 @@ services:
       # dynacat
       - "dynacat.name=Seerr"
       - "dynacat.icon=sh:seerr"
-      - "dynacat.url=https://seerr.home.arpa"
+      - "dynacat.url=http://seerr.home.arpa"
       - "dynacat.description=Request media"
       - "dynacat.category=arr"
       - "dynacat.id=seerr"
