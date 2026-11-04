@@ -27,7 +27,7 @@ services:
       # dynacat
       - "dynacat.name=Prowlarr"
       - "dynacat.icon=sh:prowlarr"
-      - "dynacat.url=https://prowlarr.home.arpa"
+      - "dynacat.url=http://prowlarr.home.arpa"
       - "dynacat.description=prowlarr"
       - "dynacat.category=arr"
       - "dynacat.id=prowlarr"
