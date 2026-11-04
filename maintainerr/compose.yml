@@ -17,12 +17,12 @@ services:
     labels:
       - "traefik.enable=true"
       # https
-      - "traefik.http.routers.maintain.rule=host(`maintain.home.arpa`)"
+      - "traefik.http.routers.maintain.rule=Host(`maintain.home.arpa`)"
       - "traefik.http.routers.maintain.entrypoints=websecure"
       - 'traefik.http.routers.maintain.tls=true'
       - "traefik.http.services.maintain.loadbalancer.server.port=6246"
       # http
-      - "traefik.http.routers.maintain-insecure.rule=host(`maintain.home.arpa`)"
+      - "traefik.http.routers.maintain-insecure.rule=Host(`maintain.home.arpa`)"
       - "traefik.http.routers.maintain-insecure.entrypoints=web"
       # dynacat
       - "dynacat.name=Maintainerr"
