@@ -39,8 +39,8 @@ services:
       # dynacat
       - "dynacat.name=Audiomuse"
       - "dynacat.icon=sh:audiomuse-ai"
-      - "dynacat.url=https://audiomuse.home.arpa"
-      - "dynacat.description=Smart AI playlist"
+      - "dynacat.url=http://audiomuse.home.arpa"
+      - "dynacat.description=Smart AI playlist for navidrome"
       - "dynacat.category=tools"
       - "dynacat.id=audio"
       - "dynacat.hide=false"
