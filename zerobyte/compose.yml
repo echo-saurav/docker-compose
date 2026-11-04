@@ -27,12 +27,12 @@ services:
     labels:
       - "traefik.enable=true"
       # https
-      - "traefik.http.routers.zero.rule=host(`zero.home.arpa`)"
+      - "traefik.http.routers.zero.rule=Host(`zero.home.arpa`)"
       - "traefik.http.routers.zero.entrypoints=websecure"
       - 'traefik.http.routers.zero.tls=true'
       - "traefik.http.services.zero.loadbalancer.server.port=4096"
       # http
-      - "traefik.http.routers.zero-insecure.rule=host(`zero.home.arpa`)"
+      - "traefik.http.routers.zero-insecure.rule=Host(`zero.home.arpa`)"
       - "traefik.http.routers.zero-insecure.entrypoints=web"
       # dynacat
       - "dynacat.name=Zerobyte"
