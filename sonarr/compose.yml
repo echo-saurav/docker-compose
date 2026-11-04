@@ -28,7 +28,7 @@ services:
       # dynacat
       - "dynacat.name=Sonarr"
       - "dynacat.icon=sh:sonarr"
-      - "dynacat.url=https://sonarr.home.arpa"
+      - "dynacat.url=http://sonarr.home.arpa"
       - "dynacat.description=Series arr"
       - "dynacat.category=arr"
       - "dynacat.id=sonarr"
