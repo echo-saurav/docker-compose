@@ -29,7 +29,7 @@ services:
       # dynacat
       - "dynacat.name=AudioBookShelf"
       - "dynacat.icon=sh:audiobookshelf"
-      - "dynacat.url=https://audiobook.home.arpa"
+      - "dynacat.url=http://audiobook.home.arpa"
       - "dynacat.description=audiobooks"
       - "dynacat.category=tools"
       - "dynacat.id=audiobooks"
