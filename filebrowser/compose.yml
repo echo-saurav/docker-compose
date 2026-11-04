@@ -17,12 +17,12 @@ services:
     labels:
       - "traefik.enable=true"
       # https
-      - "traefik.http.routers.file.rule=host(`file.home.arpa`)"
+      - "traefik.http.routers.file.rule=Host(`file.home.arpa`)"
       - "traefik.http.routers.file.entrypoints=websecure"
       - 'traefik.http.routers.file.tls=true'
       - "traefik.http.services.file.loadbalancer.server.port=80"
       # http
-      - "traefik.http.routers.file-insecure.rule=host(`file.home.arpa`)"
+      - "traefik.http.routers.file-insecure.rule=Host(`file.home.arpa`)"
       - "traefik.http.routers.file-insecure.entrypoints=web"
       # dynacat
       - "dynacat.name=Filebrowser"
