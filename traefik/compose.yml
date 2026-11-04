@@ -34,7 +34,7 @@ services:
       # dynacat
       - "dynacat.name=Traefik"
       - "dynacat.icon=sh:traefik"
-      - "dynacat.url=https://traefik.home.arpa"
+      - "dynacat.url=http://traefik.home.arpa"
       - "dynacat.description=Reverse Proxy"
       - "dynacat.category=tools"
       - "dynacat.id=traefik"
