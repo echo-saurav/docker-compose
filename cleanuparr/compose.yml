@@ -30,7 +30,7 @@ services:
       # dynacat
       - "dynacat.name=Cleanuparr"
       - "dynacat.icon=sh:cleanuparr"
-      - "dynacat.url=https://clean.home.arpa"
+      - "dynacat.url=http://clean.home.arpa"
       - "dynacat.description=clean arrs"
       - "dynacat.category=arr"
       - "dynacat.id=cleanuparr"
