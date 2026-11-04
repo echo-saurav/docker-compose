@@ -37,7 +37,7 @@ services:
       # dynacat
       - "dynacat.name=Zerobyte"
       - "dynacat.icon=sh:zerobyte"
-      - "dynacat.url=https://zero.home.arpa"
+      - "dynacat.url=http://zero.home.arpa"
       - "dynacat.description=Backup services"
       - "dynacat.category=tools"
       - "dynacat.id=zerobyte"
