@@ -21,12 +21,12 @@ services:
     labels:
       - "traefik.enable=true"
       # https
-      - "traefik.http.routers.adguard.rule=host(`adguard.home.arpa`)"
+      - "traefik.http.routers.adguard.rule=Host(`adguard.home.arpa`)"
       - "traefik.http.routers.adguard.entrypoints=websecure"
       - 'traefik.http.routers.adguard.tls=true'
       - "traefik.http.services.adguard.loadbalancer.server.port=80"
       # http
-      - "traefik.http.routers.adguard-insecure.rule=host(`adguard.home.arpa`)"
+      - "traefik.http.routers.adguard-insecure.rule=Host(`adguard.home.arpa`)"
       - "traefik.http.routers.adguard-insecure.entrypoints=web"
       # dynacat
       - "dynacat.name=Adgurd"
