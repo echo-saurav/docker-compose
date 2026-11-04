@@ -32,12 +32,12 @@ services:
     labels:
       - "traefik.enable=true"
       # https
-      - "traefik.http.routers.transmission.rule=host(`transmission.home.arpa`)"
+      - "traefik.http.routers.transmission.rule=Host(`transmission.home.arpa`)"
       - "traefik.http.routers.transmission.entrypoints=websecure"
       - 'traefik.http.routers.transmission.tls=true'
       - "traefik.http.services.transmission.loadbalancer.server.port=9091"
       # http
-      - "traefik.http.routers.transmission-insecure.rule=host(`transmission.home.arpa`)"
+      - "traefik.http.routers.transmission-insecure.rule=Host(`transmission.home.arpa`)"
       - "traefik.http.routers.transmission-insecure.entrypoints=web"
       # dynacat
       - "dynacat.name=Transmission"
