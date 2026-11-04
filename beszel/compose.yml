@@ -28,7 +28,7 @@ services:
       # dynacat
       - "dynacat.name=Beszel"
       - "dynacat.icon=sh:beszel"
-      - "dynacat.url=https://beszel.home.arpa"
+      - "dynacat.url=http://beszel.home.arpa"
       - "dynacat.description=system monitoring"
       - "dynacat.category=tools"
       - "dynacat.id=beszel"
