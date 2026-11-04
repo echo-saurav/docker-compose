@@ -27,7 +27,7 @@ services:
       # dynacat
       - "dynacat.name=Dockhand"
       - "dynacat.icon=sh:dockhand"
-      - "dynacat.url=https://dockhand.home.arpa"
+      - "dynacat.url=http://dockhand.home.arpa"
       - "dynacat.description=Docker manager"
       - "dynacat.category=primary"
       - "dynacat.id=dockhand"
