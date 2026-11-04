@@ -81,7 +81,7 @@ services:
       # dynacat
       - "dynacat.name=Yubal"
       - "dynacat.icon=di:nextcloud-ncdownloader"
-      - "dynacat.url=https://download-music.home.arpa"
+      - "dynacat.url=http://download-music.home.arpa"
       - "dynacat.description=download music to navidrome"
       - "dynacat.category=tools"
       - "dynacat.id=yubal"
