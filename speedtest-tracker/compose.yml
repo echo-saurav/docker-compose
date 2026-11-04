@@ -36,12 +36,12 @@ services:
     labels:
       - "traefik.enable=true"
       # https
-      - "traefik.http.routers.speed-test.rule=host(`speed.home.arpa`)"
+      - "traefik.http.routers.speed-test.rule=Host(`speed.home.arpa`)"
       - "traefik.http.routers.speed-test.entrypoints=websecure"
       - 'traefik.http.routers.speed-test.tls=true'
       - "traefik.http.services.speed-test.loadbalancer.server.port=80"
       # http
-      - "traefik.http.routers.speed-test-insecure.rule=host(`speed.home.arpa`)"
+      - "traefik.http.routers.speed-test-insecure.rule=Host(`speed.home.arpa`)"
       - "traefik.http.routers.speed-test-insecure.entrypoints=web"
       # dynacat
       - "dynacat.name=Openspeed Tracker"
