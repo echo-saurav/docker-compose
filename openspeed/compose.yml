@@ -22,8 +22,8 @@ services:
       # dynacat
       - "dynacat.name=Openspeed"
       - "dynacat.icon=di:openspeedtest"
-      - "dynacat.url=http://${DUCK_BASE}/speed"
-      - "dynacat.description=Test connection"
+      - "dynacat.url=https://${DUCK_BASE}/speed"
+      - "dynacat.description=Test internet connection"
       - "dynacat.category=tools"
       - "dynacat.id=openspeed"
       - "dynacat.hide=false"
