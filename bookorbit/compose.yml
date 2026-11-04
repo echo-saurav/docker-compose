@@ -67,7 +67,7 @@ services:
       # dynacat
       - "dynacat.name=Bookorbit"
       - "dynacat.icon=sh:bookorbit"
-      - "dynacat.url=http://${DUCK_BOOKORBIT}"
+      - "dynacat.url=https://${DUCK_BOOKORBIT}"
       - "dynacat.description=Books and audiobook"
       - "dynacat.category=primary"
       - "dynacat.id=bookorbit"
