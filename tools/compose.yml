@@ -21,7 +21,7 @@ services:
       # dynacat
       - "dynacat.name=It Tools"
       - "dynacat.icon=sh:it-tools"
-      - "dynacat.url=https://tools.home.arpa"
+      - "dynacat.url=http://tools.home.arpa"
       - "dynacat.description=tools"
       - "dynacat.category=tools"
       - "dynacat.id=it-tools"
@@ -50,7 +50,7 @@ services:
       # dynacat
       - "dynacat.name=Omnitools"
       - "dynacat.icon=sh:omnitools"
-      - "dynacat.url=https://omnitools.home.arpa"
+      - "dynacat.url=http://omnitools.home.arpa"
       - "dynacat.description=tools"
       - "dynacat.category=tools"
       - "dynacat.id=omni-tools"
