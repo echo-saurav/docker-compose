@@ -54,6 +54,16 @@ services:
       # http
       - "traefik.http.routers.n8n-insecure.rule=Host(`n8n.home.arpa`)"
       - "traefik.http.routers.n8n-insecure.entrypoints=web"
+      # dynacat
+      - "dynacat.name=n8n"
+      - "dynacat.icon=sh:n8n"
+      - "dynacat.url=https://n8n.home.arpa"
+      - "dynacat.description=automations"
+      - "dynacat.category=tools"
+      - "dynacat.id=n8n"
+      - "dynacat.hide=false"
+      - "dynacat.same-tab=true"
+
 
 
 networks:

@@ -1,0 +1,43 @@
+
+services:
+  dockhand:
+    image: fnsys/dockhand:v1.0.56
+    container_name: dockhand
+    restart: unless-stopped
+    environment:
+      - PUID=${UID}
+      - PGID=${GID}
+    ports:
+      - 3980:3000
+    volumes:
+      - ./data/dockhand:/app/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - traefik-net
+    labels:
+      - "traefik.enable=true"
+      # https
+      - "traefik.http.routers.dockhand.rule=host(`dockhand.home.arpa`)"
+      - "traefik.http.routers.dockhand.entrypoints=websecure"
+      - "traefik.http.routers.dockhand.tls=true"
+      - "traefik.http.services.dockhand.loadbalancer.server.port=3000"
+      # http
+      - "traefik.http.routers.dockhand-insecure.rule=host(`dockhand.home.arpa`)"
+      - "traefik.http.routers.dockhand-insecure.entrypoints=web"
+      # dynacat
+      - "dynacat.name=Dockhand"
+      - "dynacat.icon=sh:dockhand"
+      - "dynacat.url=https://dockhand.home.arpa"
+      - "dynacat.description=Docker manager"
+      - "dynacat.category=primary"
+      - "dynacat.id=dockhand"
+      - "dynacat.hide=false"
+      - "dynacat.same-tab=true"
+
+
+networks:
+  traefik-net:
+    external: true
+    name: traefik-net
+
+

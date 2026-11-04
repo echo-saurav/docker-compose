@@ -29,13 +29,22 @@ services:
     labels:
       - "traefik.enable=true"
       # https
-      - "traefik.http.routers.audioai.rule=Host(`audioai.home.arpa`)"
+      - "traefik.http.routers.audioai.rule=Host(`audiomuse.home.arpa`)"
       - "traefik.http.routers.audioai.entrypoints=websecure"
       - 'traefik.http.routers.audioai.tls=true'
       - "traefik.http.services.audioai.loadbalancer.server.port=8000"
       # http
       - "traefik.http.routers.audioai-insecure.rule=Host(`audioai.home.arpa`)"
       - "traefik.http.routers.audioai-insecure.entrypoints=web"
+      # dynacat
+      - "dynacat.name=Audiomuse"
+      - "dynacat.icon=sh:audiomuse-ai"
+      - "dynacat.url=https://audiomuse.home.arpa"
+      - "dynacat.description=Smart AI playlist"
+      - "dynacat.category=tools"
+      - "dynacat.id=audio"
+      - "dynacat.hide=false"
+      - "dynacat.same-tab=true"
 
 
   audiomuse-worker:
@@ -62,6 +71,11 @@ services:
     depends_on:
       - postgres
     restart: unless-stopped
+    labels:
+      - "dynacat.category=tools"
+      - "dynacat.parent=audio"
+      - "dynacat.name=Worker"
+      - "dynacat.hide=false"
 
 
   postgres:
@@ -79,6 +93,11 @@ services:
     restart: unless-stopped
     networks:
       - traefik-net
+    labels:
+      - "dynacat.category=tools"
+      - "dynacat.parent=audio"
+      - "dynacat.name=DB"
+      - "dynacat.hide=false"
 
 
 networks:

@@ -24,6 +24,16 @@ services:
       # http
       - "traefik.http.routers.file-insecure.rule=host(`file.home.arpa`)"
       - "traefik.http.routers.file-insecure.entrypoints=web"
+      # dynacat
+      - "dynacat.name=Filebrowser"
+      - "dynacat.icon=di:filebrowser-quantum"
+      - "dynacat.url=https://file.home.arpa"
+      - "dynacat.description=file"
+      - "dynacat.category=tools"
+      - "dynacat.id=filebrowser-quantum"
+      - "dynacat.hide=false"
+      - "dynacat.same-tab=true"
+
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:80/health"] 
       interval: 60s

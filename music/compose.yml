@@ -39,6 +39,15 @@ services:
       # http
       - "traefik.http.routers.nav-insecure.rule=Host(`${DUCK_BASE}`) && PathPrefix(`/navmusic`)"
       - "traefik.http.routers.nav-insecure.entrypoints=web"
+      # dynacat
+      - "dynacat.name=Navidrome"
+      - "dynacat.icon=sh:navidrome"
+      - "dynacat.url=https://${DUCK_BASE}/navmusic"
+      - "dynacat.description=music"
+      - "dynacat.category=primary"
+      - "dynacat.id=navidrome"
+      - "dynacat.hide=false"
+      - "dynacat.same-tab=true"
 
 
   yubal:
@@ -69,7 +78,15 @@ services:
       # http
       - "traefik.http.routers.yubal-insecure.rule=host(`download-music.home.arpa`)"
       - "traefik.http.routers.yubal-insecure.entrypoints=web"
-
+      # dynacat
+      - "dynacat.name=Yubal"
+      - "dynacat.icon=di:nextcloud-ncdownloader"
+      - "dynacat.url=https://download-music.home.arpa"
+      - "dynacat.description=download music to navidrome"
+      - "dynacat.category=tools"
+      - "dynacat.id=yubal"
+      - "dynacat.hide=false"
+      - "dynacat.same-tab=true"
 
 
 networks:

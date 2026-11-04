@@ -48,6 +48,16 @@ services:
       - "traefik.http.routers.nextcloud.middlewares=nextcloud_redirectregex,next_hsts"
       - "traefik.http.routers.nextcloud-insecure.middlewares=nextcloud_redirectregex,next_hsts"
       - "traefik.http.routers.nextcloud-local.middlewares=nextcloud_redirectregex,next_hsts"
+      # dynacat
+      - "dynacat.name=Nextcloud"
+      - "dynacat.icon=sh:nextcloud"
+      - "dynacat.url=https://${DUCK_NEXT}"
+      - "dynacat.description=Private Cloud"
+      - "dynacat.category=primary"
+      - "dynacat.id=nextcloud"
+      - "dynacat.hide=false"
+      - "dynacat.same-tab=true"
+
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost/status.php"]
       interval: 60s
@@ -72,6 +82,12 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_DB=nextcloud
       - TZ=${TZ}
+    labels:
+      - "dynacat.category=primary"
+      - "dynacat.parent=nextcloud"
+      - "dynacat.name=DB"
+      - "dynacat.hide=false"
+
     healthcheck:
       test: ["CMD-SHELL", "sh -c pg_isready -U oc_saurav -d nextcloud"]
       interval: 30s
@@ -102,6 +118,11 @@ services:
       # middlewares
       - "traefik.http.middlewares.whiteboard-strip.stripprefix.prefixes=/whiteboard"
       - "traefik.http.routers.whiteboard.middlewares=whiteboard-strip"
+      # dynacat
+      - "dynacat.category=primary"
+      - "dynacat.parent=nextcloud"
+      - "dynacat.name=Whiteboard"
+      - "dynacat.hide=false"
 
 
 networks:

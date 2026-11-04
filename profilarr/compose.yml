@@ -24,6 +24,16 @@ services:
       # http
       - "traefik.http.routers.profilarr-insecure.rule=host(`profilarr.home.arpa`)"
       - "traefik.http.routers.profilarr-insecure.entrypoints=web"
+      # dynacat
+      - "dynacat.name=Profilarr"
+      - "dynacat.icon=sh:profilarr"
+      - "dynacat.url=https://profilarr.home.arpa"
+      - "dynacat.description=manage arrs"
+      - "dynacat.category=arr"
+      - "dynacat.id=profilarr"
+      - "dynacat.hide=false"
+      - "dynacat.same-tab=true"
+
 
 
 networks:

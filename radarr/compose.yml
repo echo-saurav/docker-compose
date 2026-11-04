@@ -25,6 +25,16 @@ services:
       # http
       - "traefik.http.routers.radarr-insecure.rule=Host(`radarr-auto.home.arpa`)"
       - "traefik.http.routers.radarr-insecure.entrypoints=web"
+      # dynacat
+      - "dynacat.name=Radarr"
+      - "dynacat.icon=sh:radarr"
+      - "dynacat.url=https://radarr-auto.home.arpa"
+      - "dynacat.description=Movies arr"
+      - "dynacat.category=arr"
+      - "dynacat.id=radarr"
+      - "dynacat.hide=false"
+      - "dynacat.same-tab=true"
+
 
 
   radarr-manual:
@@ -52,6 +62,15 @@ services:
       # http
       - "traefik.http.routers.radarr-manual-insecure.rule=Host(`radarr.home.arpa`)"
       - "traefik.http.routers.radarr-manual-insecure.entrypoints=web"
+      # dynacat
+      - "dynacat.name=Radarr Manual"
+      - "dynacat.icon=sh:radarr"
+      - "dynacat.url=https://radarr.home.arpa"
+      - "dynacat.description=Movies arr"
+      - "dynacat.category=arr"
+      - "dynacat.id=radarr-manual"
+      - "dynacat.hide=false"
+      - "dynacat.same-tab=true"
 
 
 

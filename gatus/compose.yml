@@ -29,6 +29,15 @@ services:
       # http
       - "traefik.http.routers.gatus-insecure.rule=Host(`gatus.home.arpa`)"
       - "traefik.http.routers.gatus-insecure.entrypoints=web"
+      # dynacat
+      - "dynacat.name=Gatus"
+      - "dynacat.icon=sh:gatus"
+      - "dynacat.url=https://gatus.home.arpa"
+      - "dynacat.description=service monitoring"
+      - "dynacat.category=tools"
+      - "dynacat.id=gatus"
+      - "dynacat.hide=false"
+      - "dynacat.same-tab=true"
 
 
 

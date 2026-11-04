@@ -31,6 +31,16 @@ services:
       # http
       - traefik.http.routers.traefik-insecure.rule=Host(`traefik.home.arpa`)
       - traefik.http.routers.traefik-insecure.entrypoints=web
+      # dynacat
+      - "dynacat.name=Traefik"
+      - "dynacat.icon=sh:traefik"
+      - "dynacat.url=https://traefik.home.arpa"
+      - "dynacat.description=Reverse Proxy"
+      - "dynacat.category=tools"
+      - "dynacat.id=traefik"
+      - "dynacat.hide=false"
+      - "dynacat.same-tab=true"
+
 
 
   mkcert:
@@ -43,6 +53,11 @@ services:
       - domain=*.home.arpa
     volumes:
       - ./data/mkcert:/root/.local/share/mkcert
+    labels:
+      - "dynacat.parent=traefik"
+      - "dynacat.name=mkcert"
+      - "dynacat.hide=false"
+      - "dynacat.category=tools"
 
 networks:
   traefik-net:

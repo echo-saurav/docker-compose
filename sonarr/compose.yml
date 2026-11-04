@@ -25,6 +25,15 @@ services:
       # http
       - "traefik.http.routers.sonarr-insecure.rule=Host(`sonarr.home.arpa`)"
       - "traefik.http.routers.sonarr-insecure.entrypoints=web"
+      # dynacat
+      - "dynacat.name=Sonarr"
+      - "dynacat.icon=sh:sonarr"
+      - "dynacat.url=https://sonarr.home.arpa"
+      - "dynacat.description=Series arr"
+      - "dynacat.category=arr"
+      - "dynacat.id=sonarr"
+      - "dynacat.hide=false"
+      - "dynacat.same-tab=true"
 
 
 networks:

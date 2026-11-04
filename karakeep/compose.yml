@@ -28,7 +28,15 @@ services:
       # http
       - "traefik.http.routers.karakeep-insecure.rule=host(`${DUCK_KARA}`)"
       - "traefik.http.routers.karakeep-insecure.entrypoints=web"
-
+      # dynacat
+      - "dynacat.name=Karakeep"
+      - "dynacat.icon=si:karakeep"
+      - "dynacat.url=https://${DUCK_KARA}"
+      - "dynacat.description=Bookmarks manager"
+      - "dynacat.category=primary"
+      - "dynacat.id=karakeep"
+      - "dynacat.hide=false"
+      - "dynacat.same-tab=true"
 
   # https://github.com/karakeep-app/karakeep/pkgs/container/karakeep-chrome
   chrome:
@@ -44,6 +52,11 @@ services:
       - --hide-scrollbars
       - --disable-blink-features=AutomationControlled
       - --window-size=1440,900
+    labels:
+      - "dynacat.category=primary"
+      - "dynacat.parent=karakeep"
+      - "dynacat.name=chrome"
+      - "dynacat.hide=false"
 
 
   meilisearch:
@@ -58,6 +71,11 @@ services:
       MEILI_NO_ANALYTICS: "true"
     volumes:
       - ./data/meilisearch:/meili_data
+    labels:
+      - "dynacat.category=primary"
+      - "dynacat.parent=karakeep"
+      - "dynacat.name=meilisearch"
+      - "dynacat.hide=false"
 
 
 networks:

@@ -18,6 +18,15 @@ services:
       # http
       - "traefik.http.routers.it-tools-insecure.rule=Host(`tools.home.arpa`)"
       - "traefik.http.routers.it-tools-insecure.entrypoints=web"
+      # dynacat
+      - "dynacat.name=It Tools"
+      - "dynacat.icon=sh:it-tools"
+      - "dynacat.url=https://tools.home.arpa"
+      - "dynacat.description=tools"
+      - "dynacat.category=tools"
+      - "dynacat.id=it-tools"
+      - "dynacat.hide=false"
+      - "dynacat.same-tab=true"
 
 
   omni-tools:
@@ -38,6 +47,15 @@ services:
       # http
       - "traefik.http.routers.omni-tools-insecure.rule=Host(`omnitools.home.arpa`)"
       - "traefik.http.routers.omni-tools-insecure.entrypoints=web"
+      # dynacat
+      - "dynacat.name=Omnitools"
+      - "dynacat.icon=sh:omnitools"
+      - "dynacat.url=https://omnitools.home.arpa"
+      - "dynacat.description=tools"
+      - "dynacat.category=tools"
+      - "dynacat.id=omni-tools"
+      - "dynacat.hide=false"
+      - "dynacat.same-tab=true"
 
 
 networks:

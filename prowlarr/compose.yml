@@ -24,6 +24,15 @@ services:
       # http
       - "traefik.http.routers.prowlarr-insecure.rule=host(`prowlarr.home.arpa`)"
       - "traefik.http.routers.prowlarr-insecure.entrypoints=web"
+      # dynacat
+      - "dynacat.name=Prowlarr"
+      - "dynacat.icon=sh:prowlarr"
+      - "dynacat.url=https://prowlarr.home.arpa"
+      - "dynacat.description=prowlarr"
+      - "dynacat.category=arr"
+      - "dynacat.id=prowlarr"
+      - "dynacat.hide=false"
+      - "dynacat.same-tab=true"
 
   # removed flaresolverr because it use way too much cpu but not really useful to me 
   # flaresolverr:

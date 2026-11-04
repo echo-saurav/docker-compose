@@ -27,6 +27,16 @@ services:
       # http
       - "traefik.http.routers.bazarr-insecure.rule=Host(`bazarr.home.arpa`)"
       - "traefik.http.routers.bazarr-insecure.entrypoints=web"
+      # dynacat
+      - "dynacat.name=Bazarr"
+      - "dynacat.icon=sh:bazarr"
+      - "dynacat.url=https://bazarr.home.arpa"
+      - "dynacat.description=subtitle downloader"
+      - "dynacat.category=arr"
+      - "dynacat.id=bazarr"
+      - "dynacat.hide=false"
+      - "dynacat.same-tab=true"
+
 
 
   bazarr-manual:
@@ -56,6 +66,16 @@ services:
       # http
       - "traefik.http.routers.bazarr-manual-insecure.rule=Host(`bazarr-manual.home.arpa`)"
       - "traefik.http.routers.bazarr-manual-insecure.entrypoints=web"
+      # dynacat
+      - "dynacat.name=Bazarr Manual"
+      - "dynacat.icon=sh:bazarr"
+      - "dynacat.url=https://bazarr-manual.home.arpa"
+      - "dynacat.description=subtitle downloader"
+      - "dynacat.category=arr"
+      - "dynacat.id=bazarr-manual"
+      - "dynacat.hide=false"
+      - "dynacat.same-tab=true"
+
 
   # whisperasr:
   #   image: onerahmet/openai-whisper-asr-webservice:v1.9.1

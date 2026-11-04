@@ -25,6 +25,16 @@ services:
       # http
       - "traefik.http.routers.beszel-insecure.rule=host(`beszel.home.arpa`)"
       - "traefik.http.routers.beszel-insecure.entrypoints=web"
+      # dynacat
+      - "dynacat.name=Beszel"
+      - "dynacat.icon=sh:beszel"
+      - "dynacat.url=https://beszel.home.arpa"
+      - "dynacat.description=system monitoring"
+      - "dynacat.category=tools"
+      - "dynacat.id=beszel"
+      - "dynacat.hide=false"
+      - "dynacat.same-tab=true"
+
     healthcheck:
       test: ['CMD', '/beszel', 'health', '--url', 'http://localhost:8090']
       start_period: 5s
@@ -66,6 +76,12 @@ services:
     healthcheck:
       test: ['CMD', '/agent', 'health']
       interval: 120s
+    labels:
+      - "dynacat.parent=beszel"
+      - "dynacat.name=Beszel Agent"
+      - "dynacat.hide=false"
+      - "dynacat.category=tools"
+
 
 networks:
   traefik-net:

@@ -1,7 +1,6 @@
 
 services:
   maintainerr:
-    # image: ghcr.io/maintainerr/maintainerr:3.13.0
     image: ghcr.io/maintainerr/maintainerr:3.31.0
     container_name: maintainerr
     user: ${UID}:${GID}
@@ -25,6 +24,16 @@ services:
       # http
       - "traefik.http.routers.maintain-insecure.rule=host(`maintain.home.arpa`)"
       - "traefik.http.routers.maintain-insecure.entrypoints=web"
+      # dynacat
+      - "dynacat.name=Maintainerr"
+      - "dynacat.icon=sh:maintainerr"
+      - "dynacat.url=https://maintain.home.arpa"
+      - "dynacat.description=maintain arrs"
+      - "dynacat.category=tools"
+      - "dynacat.id=maintainerr"
+      - "dynacat.hide=false"
+      - "dynacat.same-tab=true"
+
     healthcheck:
       test: ['CMD', '/opt/app/healthcheck.sh']
       interval: 60s

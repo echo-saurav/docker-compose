@@ -1,0 +1,128 @@
+---
+services:
+  sparkyfitness-server:
+    image: codewithcj/sparkyfitness_server:${VERSION}
+    container_name: sparkyfitness-server
+    environment:
+      SPARKY_FITNESS_LOG_LEVEL: ${SPARKY_FITNESS_LOG_LEVEL}
+      ALLOW_PRIVATE_NETWORK_CORS: ${ALLOW_PRIVATE_NETWORK_CORS:-false}
+      SPARKY_FITNESS_EXTRA_TRUSTED_ORIGINS: ${SPARKY_FITNESS_EXTRA_TRUSTED_ORIGINS:-}
+      SPARKY_FITNESS_PUBLIC_API_DOCS: ${SPARKY_FITNESS_PUBLIC_API_DOCS:-false}
+      SPARKY_FITNESS_DB_USER: ${SPARKY_FITNESS_DB_USER:-sparky}
+      SPARKY_FITNESS_DB_HOST: ${SPARKY_FITNESS_DB_HOST:-sparkyfitness-db} # Use the service name 'sparkyfitness-db' for inter-container communication
+      SPARKY_FITNESS_DB_NAME: ${SPARKY_FITNESS_DB_NAME}
+      SPARKY_FITNESS_DB_PASSWORD: ${SPARKY_FITNESS_DB_PASSWORD:?Variable is required and must be set}
+      SPARKY_FITNESS_APP_DB_USER: ${SPARKY_FITNESS_APP_DB_USER:-sparkyapp}
+      SPARKY_FITNESS_APP_DB_PASSWORD: ${SPARKY_FITNESS_APP_DB_PASSWORD:?Variable is required and must be set}
+      SPARKY_FITNESS_DB_PORT: 5432 # Uses internal container port. Do NOT change this if SPARKY_FITNESS_DB_HOST is using container name.
+      SPARKY_FITNESS_API_ENCRYPTION_KEY: ${SPARKY_FITNESS_API_ENCRYPTION_KEY:?Variable is required and must be set}
+      # Uncomment the line below and comment the line above to use a file-based secret
+      # SPARKY_FITNESS_API_ENCRYPTION_KEY_FILE: /run/secrets/sparkyfitness_api_key
+
+      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET:?Variable is required and must be set}
+      # Uncomment the line below and comment the line above to use a file-based secret
+      # BETTER_AUTH_SECRET_FILE: /run/secrets/sparkyfitness_better_auth_secret
+      SPARKY_FITNESS_FRONTEND_URL: ${SPARKY_FITNESS_FRONTEND_URL:-http://0.0.0.0:3004}
+      SPARKY_FITNESS_DISABLE_SIGNUP: ${SPARKY_FITNESS_DISABLE_SIGNUP}
+      # SPARKY_FITNESS_ADMIN_EMAIL: ${SPARKY_FITNESS_ADMIN_EMAIL} #User with this email can access the admin panel
+      # SPARKY_FITNESS_EMAIL_HOST: ${SPARKY_FITNESS_EMAIL_HOST}
+      # SPARKY_FITNESS_EMAIL_PORT: ${SPARKY_FITNESS_EMAIL_PORT}
+      # SPARKY_FITNESS_EMAIL_SECURE: ${SPARKY_FITNESS_EMAIL_SECURE}
+      # SPARKY_FITNESS_EMAIL_USER: ${SPARKY_FITNESS_EMAIL_USER}
+      # SPARKY_FITNESS_EMAIL_PASS: ${SPARKY_FITNESS_EMAIL_PASS}
+      # SPARKY_FITNESS_EMAIL_FROM: ${SPARKY_FITNESS_EMAIL_FROM}
+      # GARMIN_MICROSERVICE_URL: http://sparkyfitness-garmin:8000 # Add Garmin microservice URL
+      HTTP_PROXY: ${HTTP_PROXY:-} # Optional forward proxy for the server's outbound requests
+      HTTPS_PROXY: ${HTTPS_PROXY:-}
+      NO_PROXY: ${NO_PROXY:-}
+      PUID: ${UID}
+      GUID: ${GID}
+    networks:
+      - traefik-net
+    restart: unless-stopped
+    depends_on:
+      - sparkyfitness-db # Backend depends on the database being available
+    volumes:
+      - ./data/sparkyfitness-server/backup:/app/SparkyFitnessServer/backup
+      - ./data/sparkyfitness-server/uploads:/app/SparkyFitnessServer/uploads
+    labels:
+      - "dynacat.parent=fitness"
+      - "dynacat.name=Server"
+      - "dynacat.hide=false"
+      - "dynacat.category=tools"
+
+
+
+  sparkyfitness-frontend:
+    image: codewithcj/sparkyfitness:${VERSION}
+    container_name: sparkyfitness-frontend
+    restart: always
+    ports:
+      - 3004:80
+    depends_on:
+      - sparkyfitness-server
+    environment:
+      SPARKY_FITNESS_FRONTEND_URL: ${SPARKY_FITNESS_FRONTEND_URL}
+      SPARKY_FITNESS_SERVER_HOST: sparkyfitness-server
+      SPARKY_FITNESS_SERVER_PORT: 3010
+      PUID: ${UID}
+      GUID: ${GID}
+    networks:
+      - traefik-net
+    labels:
+      - "traefik.enable=true"
+      # https
+      - "traefik.http.routers.fitness.rule=Host(`${DUCK_FITNESS_BASE}`)"
+      - "traefik.http.routers.fitness.entrypoints=websecure"
+      - 'traefik.http.routers.fitness.tls=true'
+      - "traefik.http.routers.fitness.tls.certresolver=freedns"
+      # - "traefik.http.routers.fitness.tls.certresolver=myresolver"
+      - "traefik.http.services.fitness.loadbalancer.server.port=80"
+      # http
+      - "traefik.http.routers.fitness-insecure.rule=Host(`${DUCK_FITNESS_BASE}`)"
+      - "traefik.http.routers.fitness-insecure.entrypoints=web"
+      # dynacat
+      - "dynacat.name=Fitness"
+      - "dynacat.icon=sh:sparkyfitness"
+      - "dynacat.url=${DUCK_FITNESS_BASE}"
+      - "dynacat.description=fitness and health monitoring"
+      - "dynacat.category=tools"
+      - "dynacat.id=fitness"
+      - "dynacat.hide=false"
+      - "dynacat.same-tab=true"
+
+
+
+  sparkyfitness-db:
+    image: postgres:18.3-alpine
+    container_name: sparkyfitness-db
+    restart: always
+    # Uncomment below to expose PostgreSQL to the host (e.g., for pgAdmin, DBeaver).
+    # ports:
+    #   - "${SPARKY_FITNESS_DB_PORT:-5432}:5432"
+    environment:
+      POSTGRES_DB: ${SPARKY_FITNESS_DB_NAME:?Variable is required and must be set}
+      POSTGRES_USER: ${SPARKY_FITNESS_DB_USER:?Variable is required and must be set}
+      POSTGRES_PASSWORD: ${SPARKY_FITNESS_DB_PASSWORD:?Variable is required and must be set}
+      PUID: ${UID}
+      GUID: ${GID}
+    volumes:
+      - ./data/sparkyfitness-db:/var/lib/postgresql
+    networks:
+      - traefik-net
+    labels:
+      - "dynacat.parent=fitness"
+      - "dynacat.name=DB"
+      - "dynacat.hide=false"
+      - "dynacat.category=tools"
+
+
+networks:
+  traefik-net:
+    external: true
+    name: traefik-net
+
+
+
+
+

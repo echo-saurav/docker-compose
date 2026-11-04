@@ -29,6 +29,15 @@ services:
       # http
       - "traefik.http.routers.apprise-insecure.rule=host(`apprise.home.arpa`)"
       - "traefik.http.routers.apprise-insecure.entrypoints=web"
+      # dynacat
+      - "dynacat.name=Apprise"
+      - "dynacat.icon=sh:apprise"
+      - "dynacat.url=https://apprise.home.arpa"
+      - "dynacat.description=Notifications"
+      - "dynacat.category=tools"
+      - "dynacat.id=notification"
+      - "dynacat.hide=false"
+      - "dynacat.same-tab=true"
 
 
   # https://bark.day.app/#/
@@ -42,6 +51,11 @@ services:
       - ./data/bark:/data
     ports:
       - 8181:8080
+    labels:
+      - "dynacat.parent=notification"
+      - "dynacat.name=Bark"
+      - "dynacat.hide=false"
+      - "dynacat.category=tools"
 
 
 

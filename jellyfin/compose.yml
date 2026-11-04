@@ -43,6 +43,16 @@ services:
       # http
       - "traefik.http.routers.jellyfin-insecure.rule=Host(`${DUCK_BASE}`) && PathPrefix(`/movie`)"
       - "traefik.http.routers.jellyfin-insecure.entrypoints=web"
+      # dynacat
+      - "dynacat.name=Jellyfin"
+      - "dynacat.icon=sh:jellyfin"
+      - "dynacat.url=https://${DUCK_BASE}/movie"
+      - "dynacat.description=Movies & Series"
+      - "dynacat.category=primary"
+      - "dynacat.id=jellyfin"
+      - "dynacat.hide=false"
+      - "dynacat.same-tab=true"
+
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:8096/health || exit 1"]
       interval: 30s

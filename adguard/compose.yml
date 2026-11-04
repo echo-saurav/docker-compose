@@ -28,6 +28,16 @@ services:
       # http
       - "traefik.http.routers.adguard-insecure.rule=host(`adguard.home.arpa`)"
       - "traefik.http.routers.adguard-insecure.entrypoints=web"
+      # dynacat
+      - "dynacat.name=Adgurd"
+      - "dynacat.icon=di:adguard-home"
+      - "dynacat.url=https://adguard.home.arpa"
+      - "dynacat.description=Local DNS and ads blocker"
+      - "dynacat.category=tools"
+      - "dynacat.id=adguard"
+      - "dynacat.hide=false"
+      - "dynacat.same-tab=true"
+
 
 networks:
   traefik-net:

@@ -27,7 +27,15 @@ services:
       # http
       - "traefik.http.routers.clean-insecure.rule=Host(`clean.home.arpa`)"
       - "traefik.http.routers.clean-insecure.entrypoints=web"
-
+      # dynacat
+      - "dynacat.name=Cleanuparr"
+      - "dynacat.icon=sh:cleanuparr"
+      - "dynacat.url=https://clean.home.arpa"
+      - "dynacat.description=clean arrs"
+      - "dynacat.category=arr"
+      - "dynacat.id=cleanuparr"
+      - "dynacat.hide=false"
+      - "dynacat.same-tab=true"
 
 networks:
   traefik-net:

@@ -1,5 +1,4 @@
-
-
+---
 services:
   app:
     container_name: bookorbit-app
@@ -65,6 +64,16 @@ services:
       - "traefik.http.routers.bookorbit.tls=true"
       - "traefik.http.routers.bookorbit.tls.certresolver=myresolver"
       - "traefik.http.services.bookorbit.loadbalancer.server.port=3000"
+      # dynacat
+      - "dynacat.name=Bookorbit"
+      - "dynacat.icon=sh:bookorbit"
+      - "dynacat.url=http://${DUCK_BOOKORBIT}"
+      - "dynacat.description=Books and audiobook"
+      - "dynacat.category=primary"
+      - "dynacat.id=bookorbit"
+      - "dynacat.hide=false"
+      - "dynacat.same-tab=true"
+
 
 
   # https://github.com/remsky/Kokoro-FastAPI/blob/master/docs/configuration.md
@@ -92,6 +101,12 @@ services:
       timeout: 10s
       retries: 5
       start_period: 60s
+    labels:
+      - "dynacat.category=primary"
+      - "dynacat.parent=bookorbit"
+      - "dynacat.name=Kokoro"
+      - "dynacat.hide=false"
+
 
 
   postgres:
@@ -114,6 +129,13 @@ services:
       start_period: 20s
     networks:
       - traefik-net
+    labels:
+      - "dynacat.category=primary"
+      - "dynacat.parent=bookorbit"
+      - "dynacat.name=DB"
+      - "dynacat.hide=false"
+
+
 
 
 networks:

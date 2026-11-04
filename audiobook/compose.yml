@@ -26,6 +26,15 @@ services:
       # http
       - "traefik.http.routers.audiobook-insecure.rule=host(`audiobook.home.arpa`)"
       - "traefik.http.routers.audiobook-insecure.entrypoints=web"
+      # dynacat
+      - "dynacat.name=AudioBookShelf"
+      - "dynacat.icon=sh:audiobookshelf"
+      - "dynacat.url=https://audiobook.home.arpa"
+      - "dynacat.description=audiobooks"
+      - "dynacat.category=tools"
+      - "dynacat.id=audiobooks"
+      - "dynacat.hide=false"
+      - "dynacat.same-tab=true"
 
 
 networks:

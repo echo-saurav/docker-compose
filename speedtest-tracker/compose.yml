@@ -43,6 +43,16 @@ services:
       # http
       - "traefik.http.routers.speed-test-insecure.rule=host(`speed.home.arpa`)"
       - "traefik.http.routers.speed-test-insecure.entrypoints=web"
+      # dynacat
+      - "dynacat.name=Openspeed Tracker"
+      - "dynacat.icon=di:speedtest-tracker"
+      - "dynacat.url=https://speed.home.arpa"
+      - "dynacat.description=track speed"
+      - "dynacat.category=tools"
+      - "dynacat.id=openspeed-tracker"
+      - "dynacat.hide=false"
+      - "dynacat.same-tab=true"
+
 
 
 networks:
