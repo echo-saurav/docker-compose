@@ -30,7 +30,7 @@ services:
       # dynacat
       - "dynacat.name=Bazarr"
       - "dynacat.icon=sh:bazarr"
-      - "dynacat.url=https://bazarr.home.arpa"
+      - "dynacat.url=http://bazarr.home.arpa"
       - "dynacat.description=subtitle downloader"
       - "dynacat.category=arr"
       - "dynacat.id=bazarr"
@@ -69,7 +69,7 @@ services:
       # dynacat
       - "dynacat.name=Bazarr Manual"
       - "dynacat.icon=sh:bazarr"
-      - "dynacat.url=https://bazarr-manual.home.arpa"
+      - "dynacat.url=http://bazarr-manual.home.arpa"
       - "dynacat.description=subtitle downloader"
       - "dynacat.category=arr"
       - "dynacat.id=bazarr-manual"
